@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MainTest {
 
     @Test
-    public void testArrayList() {
+    public void testFunctionGet() {
         MyArrayList<String> list = new MyArrayList<>();
         list.add("A");
         list.add("B");
@@ -23,7 +23,15 @@ public class MainTest {
     }
 
     @Test
-    public void testLinkedList() {
+    public void testFunctionSet() {
+        MyArrayList<String> list = new MyArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
 
+        String oldValue = list.set(1, "Z"); // Thay B bằng Z
+
+        assertEquals("B", oldValue);              // Kiểm tra giá trị cũ trả về
+        assertEquals("Z", list.get(1));
     }
 }
