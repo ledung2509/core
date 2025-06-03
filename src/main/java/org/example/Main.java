@@ -1,13 +1,16 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        MyArrayList list = new MyArrayList();
+        List<String> list = new ArrayList<>();
         list.add("A");
         list.add("B");
         list.add("C");
         list.add("D");
-        list.add("É");
-        System.out.println(list.get(2));
+        list.add("E");
+        System.out.println(list.get(1));
     }
 }
