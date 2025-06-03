@@ -1,8 +1,10 @@
 package org.example;
 
 import java.util.*;
+import java.util.List;
 
-public class MyArrayList<E> implements List<E> {
+public class MyArrayList<E> extends AbstractList<E>
+        implements java.util.List<E>, RandomAccess, Cloneable, java.io.Serializable {
 
     private Object[] elements;
     private int size = 0;
@@ -14,7 +16,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -24,7 +26,12 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean contains(Object o) {
-        return indexOf(o) > 0;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(elements[i], o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -39,11 +46,11 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        if (a.length < size){
+        if (a.length < size) {
             return (T[]) Arrays.copyOf(elements, size, a.getClass());
         }
         System.arraycopy(elements, 0, a, 0, size);
-        if (a.length > size){
+        if (a.length > size) {
             a[size] = null;
         }
         return a;
@@ -176,14 +183,10 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public E set(int index, E element) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
-
-        E old = (E) elements[index];
+        Objects.checkIndex(index, size);
+        E oldElement = (E) elements[index];
         elements[index] = element;
-
-        return old;
+        return oldElement;
     }
 
     @Override
@@ -209,8 +212,10 @@ public class MyArrayList<E> implements List<E> {
         }
 
         E removedElements = (E) elements[index];
-        int indexToRemove = size-index - 1;
-        System.arraycopy(elements, index + 1, elements, index, indexToRemove - index);
+        int indexToRemove = size - index - 1;
+        if (indexToRemove > 0) {
+            System.arraycopy(elements, index + 1, elements, index, indexToRemove);
+        }
 
         elements[--size] = null;
 
@@ -235,7 +240,7 @@ public class MyArrayList<E> implements List<E> {
         return -1;
     }
 
-    int lastIndexOfRange(Object o,int start,int end) {
+    int lastIndexOfRange(Object o, int start, int end) {
         Object[] es = elements;
         if (o == null) {
             for (int i = end - 1; i >= start; i--) {
@@ -255,7 +260,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public int lastIndexOf(Object o) {
-        return lastIndexOfRange(o,0,size);
+        return lastIndexOfRange(o, 0, size);
     }
 
     @Override
@@ -329,6 +334,14 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+            throw new IndexOutOfBoundsException("fromIndex: " + fromIndex + ", toIndex: " + toIndex);
+        }
+
+        List<E> result = new MyArrayList<>();
+        for (int i = fromIndex; i < toIndex; i++) {
+            result.add(get(i));
+        }
+        return result;
     }
 }

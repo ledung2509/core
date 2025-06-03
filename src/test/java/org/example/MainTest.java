@@ -2,28 +2,173 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.ListIterator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class MainTest {
 
-    @Test
-    public void testArrayList() {
-        MyArrayList<String> list = new MyArrayList<>();
-        list.add("A");
-        list.add("B");
-        list.add("C");
+    MyArrayList list = new MyArrayList();
 
-        assertEquals("A", list.get(0));
-        assertEquals("B", list.get(1));
-        assertEquals("C", list.get(2));
+    @Test
+    public void testConstructorAndSize() {
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
     }
 
     @Test
-    public void testLinkedList() {
+    public void testContains() {
+        list.add(1);
+        list.add(2);
+        assertTrue(list.contains(1));
+        assertTrue(list.contains(2));
+        assertFalse(list.contains(3));
+    }
 
+    @Test
+    public void testAddAndGet() {
+        assertTrue(list.add("A"));
+        assertTrue(list.add("V"));
+        assertTrue(list.add("E"));
+        assertTrue(list.add("C"));
+        assertTrue(list.add("D"));
+        assertEquals(5, list.size());
+        assertEquals("A", list.get(0));
+    }
+
+    @Test
+    public void testSet() {
+        list.add("A");
+        list.add("B");
+        assertEquals("B", list.set(1, "C"));
+        assertEquals("C", list.get(1));
+    }
+
+    @Test
+    public void testToArray() {
+        list.add(1);
+        list.add(2);
+        Object[] arr = list.toArray();
+        assertArrayEquals(new Object[]{1,2}, arr);
+    }
+
+    @Test
+    public void testClear() {
+        list.add(1);
+        list.add(2);
+        list.clear();
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void testRemoveByIndex() {
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        assertEquals(2, list.remove(1));
+        assertEquals(2, list.size());
+        assertEquals(1, list.get(0));
+        assertEquals(3, list.get(1));
+    }
+
+    @Test
+    public void testContainsAll() {
+        list.add(1);
+        list.add(2);
+        List<Integer> other = Arrays.asList(1,2);
+        assertTrue(list.containsAll(other));
+        other = Arrays.asList(1,2,3);
+        assertFalse(list.containsAll(other));
+    }
+
+    @Test
+    public void testAddAll() {
+        List<Integer> other = Arrays.asList(1,2,3);
+        assertTrue(list.addAll(other));
+        assertEquals(3, list.size());
+        assertEquals(2, list.get(1));
+    }
+
+    @Test
+    public void testAddAllAtIndex() {
+        list.add(1);
+        list.add(4);
+        List<Integer> other = Arrays.asList(2,3);
+        assertTrue(list.addAll(1, other));
+        assertEquals(Arrays.asList(1,2,3,4), Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
+    }
+
+    @Test
+    public void testRemoveAll() {
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        assertTrue(list.removeAll(Arrays.asList(2,3)));
+        assertEquals(1, list.size());
+        assertEquals(1, list.get(0));
+        assertFalse(list.removeAll(Arrays.asList(4,5)));
+    }
+
+    @Test
+    public void testRetainAll() {
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        assertTrue(list.retainAll(Arrays.asList(2,3)));
+        assertEquals(2, list.size());
+        assertEquals(2, list.get(0));
+        assertEquals(3, list.get(1));
+    }
+
+    @Test
+    void testListIterator() {
+        list.add(1);
+        list.add(2);
+        ListIterator<Integer> it = list.listIterator();
+        assertTrue(it.hasNext());
+        assertEquals(1, it.next());
+        assertTrue(it.hasNext());
+        assertEquals(2, it.next());
+        assertFalse(it.hasNext());
+        assertTrue(it.hasPrevious());
+        assertEquals(2, it.previous());
+        assertTrue(it.hasPrevious());
+        assertEquals(1, it.previous());
+        assertFalse(it.hasPrevious());
+    }
+
+    @Test
+    void testListIteratorAddSetRemove() {
+        ListIterator<Integer> it = list.listIterator();
+        it.add(1);
+        it.add(2);
+        it.add(3);
+        assertEquals(3, list.size());
+        it = list.listIterator();
+        it.next();
+        it.set(10);
+        assertEquals(10, list.get(0));
+        it.remove();
+        assertEquals(2, list.size());
+        assertEquals(2, list.get(0));
+    }
+
+    @Test
+    void testSubList() {
+        for (int i = 0; i < 5; i++) list.add(i);
+        List<Integer> sub = list.subList(1, 4);
+        assertEquals(Arrays.asList(1,2,3), sub);
+    }
+
+    @Test
+    void testSubListOutOfBounds() {
+        list.add(1);
+        assertThrows(IndexOutOfBoundsException.class, () -> list.subList(-1, 1));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.subList(0, 2));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.subList(1, 0));
     }
 }
