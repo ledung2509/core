@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
 
@@ -12,6 +9,7 @@ public class MyArrayList<E> implements List<E> {
 
     public MyArrayList() {
         this.elements = new Object[10];
+        this.size = 0;
     }
 
     @Override
@@ -21,27 +19,34 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return indexOf(o) > 0;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return listIterator();
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return Arrays.copyOf(elements, size);
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        if (a.length < size){
+            return (T[]) Arrays.copyOf(elements, size, a.getClass());
+        }
+        System.arraycopy(elements, 0, a, 0, size);
+        if (a.length > size){
+            a[size] = null;
+        }
+        return a;
     }
 
     @Override
@@ -57,37 +62,108 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+
+            if (Objects.equals(elements[i], o)) {
+                int numRemove = size - i - 1;
+                if (numRemove > 0) {
+                    System.arraycopy(elements, i + 1, elements, i, numRemove);
+                }
+                elements[--size] = null;
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for (Object o : c) {
+            if (!contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void ensureCapacity(int minCapacity) {
+        if (minCapacity > elements.length) {
+            int newCapacity = Math.max(minCapacity, elements.length * 2);
+            elements = Arrays.copyOf(elements, newCapacity);
+        }
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        Object[] toAdd = c.toArray();
+        int numNew = toAdd.length;
+        if (numNew == 0) return false;
+
+        ensureCapacity(size + numNew); // đảm bảo đủ chỗ
+
+        System.arraycopy(toAdd, 0, elements, size, numNew);
+        size += numNew;
+        return true;
+    }
+
+    private void rangeCheckForAdd(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        }
+    }
+
+    private String outOfBoundsMsg(int index) {
+        return "Index: " + index + ", Size: " + size;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        rangeCheckForAdd(index); // kiểm tra hợp lệ
+        Object[] toAdd = c.toArray();
+        int numNew = toAdd.length;
+        if (numNew == 0) return false;
+
+        ensureCapacity(size + numNew);
+
+        // Dời phần tử từ index sang phải
+        System.arraycopy(elements, index, elements, index + numNew, size - index);
+
+        // Chèn phần tử mới
+        System.arraycopy(toAdd, 0, elements, index, numNew);
+        size += numNew;
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (c.contains(elements[i])) {
+                remove(i);
+                i--; // lùi lại 1 vì sau khi xóa, các phần tử dồn lại
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (!c.contains(elements[i])) {
+                remove(i);
+                i--;
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
     public void clear() {
-
+        Arrays.fill(elements, null);
+        size = 0;
     }
 
     @Override
@@ -100,37 +176,155 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public E set(int index, E element) {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+
+        E old = (E) elements[index];
+        elements[index] = element;
+
+        return old;
     }
 
     @Override
     public void add(int index, E element) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, elements.length * 2);
+        }
 
+        //  Dời các phần tử từ vị trí index sang phải
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+
+        elements[index] = element;
+        size++;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+
+        E removedElements = (E) elements[index];
+        int indexToRemove = size-index - 1;
+        System.arraycopy(elements, index + 1, elements, index, indexToRemove - index);
+
+        elements[--size] = null;
+
+        return removedElements;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        if (o == null) {
+            for (int i = 0; i < size; i++) {
+                if (elements[i].equals(o)) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (o.equals(elements[i])) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    int lastIndexOfRange(Object o,int start,int end) {
+        Object[] es = elements;
+        if (o == null) {
+            for (int i = end - 1; i >= start; i--) {
+                if (es[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = end - 1; i >= start; i--) {
+                if (o.equals(es[i])) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        return lastIndexOfRange(o,0,size);
     }
 
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return listIterator(0);
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        rangeCheckForAdd(index); // Cho phép index == size
+
+        return new ListIterator<E>() {
+            int cursor = index;
+            int lastRet = -1;
+
+            @Override
+            public boolean hasNext() {
+                return cursor < size;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) throw new NoSuchElementException();
+                lastRet = cursor;
+                return (E) elements[cursor++];
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return cursor > 0;
+            }
+
+            @Override
+            public E previous() {
+                if (!hasPrevious()) throw new NoSuchElementException();
+                lastRet = --cursor;
+                return (E) elements[cursor];
+            }
+
+            @Override
+            public int nextIndex() {
+                return cursor;
+            }
+
+            @Override
+            public int previousIndex() {
+                return cursor - 1;
+            }
+
+            @Override
+            public void remove() {
+                if (lastRet < 0) throw new IllegalStateException();
+                MyArrayList.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
+            }
+
+            @Override
+            public void set(E e) {
+                if (lastRet < 0) throw new IllegalStateException();
+                MyArrayList.this.set(lastRet, e);
+            }
+
+            @Override
+            public void add(E e) {
+                MyArrayList.this.add(cursor++, e);
+                lastRet = -1;
+            }
+        };
     }
 
     @Override
