@@ -44,6 +44,7 @@ public class Main {
         System.out.println("After remove index 3: " + Arrays.toString(list.toArray()));
 
         //scontainsAll, removeAll, retainAll
+        //a b c d e
         System.out.println("Contains all [C, D]: " + list.containsAll(Arrays.asList("C", "D"))); // true
         list.removeAll(Arrays.asList("G", "X"));
         System.out.println("After removeAll [G, X]: " + Arrays.toString(list.toArray()));
