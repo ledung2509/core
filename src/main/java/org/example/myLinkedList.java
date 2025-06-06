@@ -78,34 +78,31 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public E removeFirst() {
-        E element = getFirst();
-        Node<E> p = head.next;
-
-        element = null;
-        head = p;
-        if (p == null) {
+        E element = head.item;   // Lưu giá trị cần trả về
+        Node<E> next = head.next;
+        if (next == null) {      // Nếu chỉ có 1 node
+            head = null;
             tail = null;
         } else {
-            tail.prev = null;
+            next.prev = null;
+            head = next;
         }
+        size--;
         return element;
     }
 
     @Override
     public E removeLast() {
         E element = tail.item;
-        Node<E> p = tail.prev;
-
-        //Xóa phần tử
-        tail.item = null;
-        tail.prev = null;
-
-        if (tail == null) {
+        Node<E> prev = tail.prev;
+        if (prev == null) { // chỉ 1 phần tử
             head = null;
+            tail = null;
         } else {
-            tail.next = null;
-            tail = p;
+            prev.next = null;
+            tail = prev;
         }
+        size--;
         return element;
     }
 
@@ -207,10 +204,15 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public boolean add(E e) {
-        Node<E> last = tail;
-        Node<E> newNode = new Node<>(e, last, null);
-        tail = newNode;
-        last.next = newNode;
+        Node<E> newNode = new Node<>(e, tail, null);
+        if (tail == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+        size++;
         return true;
     }
 
