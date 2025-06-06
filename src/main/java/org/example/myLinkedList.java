@@ -14,7 +14,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     Node<E> tail;
     int size = 0;
 
-
     @Override
     public int size() {
         Node<E> p = head;
@@ -147,15 +146,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         return (p == null) ? null : p.item;
     }
 
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean removeLastOccurrence(Object o) {
-        return false;
-    }
 
     @Override
     public boolean offer(E e) {
@@ -164,12 +154,13 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public E remove() {
-        return null;
+        return removeFirst();
     }
 
     @Override
     public E poll() {
-        return null;
+        Node<E> p = head;
+        return p == null? null : removeFirst();
     }
 
     @Override
@@ -190,6 +181,16 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     @Override
     public E pop() {
         return null;
+    }
+
+    @Override
+    public boolean removeFirstOccurrence(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean removeLastOccurrence(Object o) {
+        return false;
     }
 
     @Override
