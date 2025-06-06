@@ -82,9 +82,9 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
         element = null;
         head = p;
-        if (p == null){
+        if (p == null) {
             tail = null;
-        }else{
+        } else {
             tail.prev = null;
         }
         return element;
@@ -99,9 +99,9 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         tail.item = null;
         tail.prev = null;
 
-        if (tail == null){
+        if (tail == null) {
             head = null;
-        }else{
+        } else {
             tail.next = null;
             tail = p;
         }
@@ -146,12 +146,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         return (p == null) ? null : p.item;
     }
 
-
-    @Override
-    public boolean offer(E e) {
-        return false;
-    }
-
     @Override
     public E remove() {
         return removeFirst();
@@ -160,31 +154,76 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     @Override
     public E poll() {
         Node<E> p = head;
-        return p == null? null : removeFirst();
+        return p == null ? null : removeFirst();
     }
 
     @Override
     public E element() {
-        return null;
+        return getFirst();
     }
 
     @Override
     public E peek() {
-        return null;
+        Node<E> p = head;
+        return (p == null) ? null : p.item;
     }
 
     @Override
     public void push(E e) {
-
+        addFirst(e);
     }
 
     @Override
     public E pop() {
-        return null;
+        return removeFirst();
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        Node<E> node = head;
+        while (node != null) {
+            if (o == null && node.item == null ? null : o.equals(node.item)) {
+                if (node.prev == null) { // node là head
+                    head = node.next;
+                } else {
+                    node.prev.next = node.next;
+                }
+                if (node.next == null) { // node là tail
+                    tail = node.prev;
+                } else {
+                    node.next.prev = node.prev;
+                }
+                node.item = null;
+                node.next = null;
+                node.prev = null;
+                size--;
+                return true;
+            }
+            node = node.next;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean add(E e) {
+        Node<E> last = tail;
+        Node<E> newNode = new Node<>(e, last, null);
+        tail = newNode;
+        last.next = newNode;
+        return true;
+    }
+
+    @Override
+    public boolean offer(E e) {
+        return add(e);
     }
 
     @Override
     public boolean removeFirstOccurrence(Object o) {
+        if (o != null) {
+            remove(o);
+            return true;
+        }
         return false;
     }
 

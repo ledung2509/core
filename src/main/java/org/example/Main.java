@@ -105,24 +105,33 @@ public class Main {
         //Get index
         System.out.println("Get index: " + list.get(3));
 
-        //Peek first
-        System.out.println("Peek first: " + list.peekFirst());
+//        //Peek first
+//        System.out.println("Peek first: " + list.peekFirst());
+//
+//        //Peek last
+//        System.out.println("Peek last: " + list.peekLast());
+//
+//        //Remove first
+//        System.out.println("Remove first: " + list.removeFirst());
+//        list.printLinkedList();
+//
+//        //Remove last
+//        System.out.println("Remove last: " + list.removeLast());
+//        list.printLinkedList();
+//
+//        //Poll first
+//        System.out.println("Poll first: " + list.pollFirst());
+//
+//        //Poll last
+//        System.out.println("Poll last: " + list.pollLast());
 
-        //Peek last
-        System.out.println("Peek last: " + list.peekLast());
-
-        //Remove first
-        System.out.println("Remove first: " + list.removeFirst());
+        //Remove
+        System.out.println("Remove: " + list.removeFirstOccurrence("E"));
         list.printLinkedList();
+        System.out.println("Get index: " + list.get(4));
 
-        //Remove last
-        System.out.println("Remove last: " + list.removeLast());
+        //Add
+        System.out.println("Add: " + list.add("FF"));
         list.printLinkedList();
-
-        //Poll first
-        System.out.println("Poll first: " + list.pollFirst());
-
-        //Poll last
-        System.out.println("Poll last: " + list.pollLast());
     }
 }
