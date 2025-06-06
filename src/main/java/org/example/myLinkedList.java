@@ -36,6 +36,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         if (isEmpty()) {
             head = tail = p;
         } else {
+            head.prev = p;
             p.next = head;
             head = p;
         }
@@ -229,17 +230,122 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public boolean removeLastOccurrence(Object o) {
+        Node<E> node = tail;
+
+        while (node != null) {
+            if (node.item == null ? null : o.equals(node.item)) {
+                if (node.prev == null) { // node là head
+                    head = node.next;
+                } else {
+                    node.prev.next = node.next;
+                }
+                if (node.next == null) { // node là tail
+                    tail = node.prev;
+                } else {
+                    node.next.prev = node.prev;
+                }
+                node.item = null;
+                node.next = null;
+                node.prev = null;
+                size--;
+                return true;
+            }
+            node = node.prev;
+        }
+
         return false;
     }
 
     @Override
     public Iterator<E> descendingIterator() {
-        return null;
+        return new Iterator<E>() {
+
+            Node<E> current = tail;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public E next() {
+                E element = current.item;
+                current = current.prev;
+                return element;
+            }
+        };
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+
+        Node<E> current = head;
+        //E element = get(index);
+        int c = 0;
+        while (current != null && c < index) {
+//            if(c == index) {
+//                head.item = element;
+//            }
+            c++;
+            current = current.next;
+        }
+
+        Node<E> startNode = current;
+        return new ListIterator<E>() {
+
+            Node<E> nextNode = startNode;
+            Node<E> lastReturned = null;
+            int nextIndex = index;
+
+            @Override
+            public boolean hasNext() {
+                return nextNode != null;
+            }
+
+            @Override
+            public E next() {
+                lastReturned = nextNode;
+                E item = nextNode.item;
+                nextNode = nextNode.next;
+                nextIndex++;
+                return item;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+
+            @Override
+            public E previous() {
+                return null;
+            }
+
+            @Override
+            public int nextIndex() {
+                return nextIndex;
+            }
+
+            @Override
+            public int previousIndex() {
+                return nextIndex - 1;
+            }
+
+            @Override
+            public void remove() {
+
+            }
+
+            @Override
+            public void set(E e) {
+                lastReturned.item = e;
+            }
+
+            @Override
+            public void add(E e) {
+
+            }
+        };
     }
 
     public void printLinkedList() {

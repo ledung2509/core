@@ -10,4 +10,11 @@ public class Node<E> {
         this.next = next;
         this.prev = prev;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "item=" + item +
+                '}';
+    }
 }

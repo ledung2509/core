@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -132,6 +133,23 @@ public class Main {
 
         //Add
         System.out.println("Add: " + list.add("FF"));
+        list.printLinkedList();
+
+        //Descending Iterator
+        Iterator<String> it = list.descendingIterator();
+        while (it.hasNext()) {
+            System.out.print(it.next() + " ");
+        }
+        System.out.println();
+
+        //List Iterator
+        Iterator<String> it1 = list.listIterator(4);
+        while (it1.hasNext()) {
+            System.out.print(it1.next() + " ");
+        }
+        System.out.println();
+
+        System.out.println("Remove last: " + list.removeLastOccurrence("H"));
         list.printLinkedList();
     }
 }
