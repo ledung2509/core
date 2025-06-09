@@ -5,7 +5,6 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.NoSuchElementException;
 
 public class myLinkedList<E> extends AbstractSequentialList<E>
         implements List<E>, Deque<E>, Cloneable, java.io.Serializable {
@@ -40,6 +39,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
             p.next = head;
             head = p;
         }
+        size++;
     }
 
     @Override
@@ -51,6 +51,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
             tail.next = p;
             tail = p;
         }
+        size++;
     }
 
     @Override
@@ -81,8 +82,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         E element = head.item;   // Lưu giá trị cần trả về
         Node<E> next = head.next;
         if (next == null) {      // Nếu chỉ có 1 node
-            head = null;
-            tail = null;
+            head = tail = null;
         } else {
             next.prev = null;
             head = next;
@@ -96,8 +96,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         E element = tail.item;
         Node<E> prev = tail.prev;
         if (prev == null) { // chỉ 1 phần tử
-            head = null;
-            tail = null;
+            head = tail = null;
         } else {
             prev.next = null;
             tail = prev;
@@ -120,11 +119,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public E getFirst() {
-        if (head == null) {
-            throw new java.util.NoSuchElementException();
-        }
-        Node<E> p = head;
-        return p.item;
+        return head.item;
     }
 
     @Override
@@ -134,14 +129,12 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public E peekFirst() {
-        Node<E> p = head;
-        return (p == null) ? null : p.item;
+        return (head == null) ? null : head.item;
     }
 
     @Override
     public E peekLast() {
-        Node<E> p = tail;
-        return (p == null) ? null : p.item;
+        return (tail == null) ? null : tail.item;
     }
 
     @Override
@@ -151,8 +144,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public E poll() {
-        Node<E> p = head;
-        return p == null ? null : removeFirst();
+        return head == null ? null : removeFirst();
     }
 
     @Override
@@ -162,8 +154,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public E peek() {
-        Node<E> p = head;
-        return (p == null) ? null : p.item;
+        return (head == null) ? null : head.item;
     }
 
     @Override
@@ -191,9 +182,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
                 } else {
                     node.next.prev = node.prev;
                 }
-                node.item = null;
-                node.next = null;
-                node.prev = null;
                 size--;
                 return true;
             }
@@ -206,8 +194,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     public boolean add(E e) {
         Node<E> newNode = new Node<>(e, tail, null);
         if (tail == null) {
-            head = newNode;
-            tail = newNode;
+            head = tail = newNode;
         } else {
             tail.next = newNode;
             tail = newNode;
@@ -223,17 +210,12 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public boolean removeFirstOccurrence(Object o) {
-        if (o != null) {
-            remove(o);
-            return true;
-        }
-        return false;
+        return remove(o);
     }
 
     @Override
     public boolean removeLastOccurrence(Object o) {
         Node<E> node = tail;
-
         while (node != null) {
             if (node.item == null ? null : o.equals(node.item)) {
                 if (node.prev == null) { // node là head
@@ -246,9 +228,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
                 } else {
                     node.next.prev = node.prev;
                 }
-                node.item = null;
-                node.next = null;
-                node.prev = null;
                 size--;
                 return true;
             }
