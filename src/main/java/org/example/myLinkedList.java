@@ -261,12 +261,8 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     public ListIterator<E> listIterator(int index) {
 
         Node<E> current = head;
-        //E element = get(index);
         int c = 0;
         while (current != null && c < index) {
-//            if(c == index) {
-//                head.item = element;
-//            }
             c++;
             current = current.next;
         }
