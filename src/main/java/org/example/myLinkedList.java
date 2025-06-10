@@ -15,13 +15,7 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
     @Override
     public int size() {
-        Node<E> p = head;
-        int count = 0;
-        while (p != null) {
-            count++;
-            p = p.next;
-        }
-        return count;
+        return size;
     }
 
     @Override
