@@ -32,6 +32,11 @@ public class myMap<K,V> implements Map<K,V> {
 
     @Override
     public V get(Object key) {
+        for (Entry<K,V> entry : list) {
+            if (entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
         return null;
     }
 
