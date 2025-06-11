@@ -57,7 +57,7 @@ public class myMap<K,V> implements Map<K,V> {
 
     @Override
     public void clear() {
-
+        list.clear();
     }
 
     @Override
