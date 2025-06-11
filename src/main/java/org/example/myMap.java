@@ -3,6 +3,7 @@ package org.example;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,11 +59,6 @@ public class myMap<K,V> implements Map<K,V> {
     }
 
     @Override
-    public V remove(Object key) {
-        return null;
-    }
-
-    @Override
     public boolean containsKey(Object key) {
         for (Entry<K,V> entry : list) {
             if (Objects.equals(entry.getKey(), key)) {
@@ -83,17 +79,42 @@ public class myMap<K,V> implements Map<K,V> {
     }
 
     @Override
+    public V remove(Object key) {
+        for (Entry<K,V> entry : list) {
+            if (Objects.equals(entry.getKey(), key)) {
+                V oldValue = entry.getValue();
+                list.remove(oldValue);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Set<K> keySet() {
-        return Set.of();
+        Set<K> set = new HashSet<>();
+        for (Entry<K,V> entry : list) {
+            set.add(entry.getKey());
+        }
+        return set;
     }
 
     @Override
     public Collection<V> values() {
-        return List.of();
+        List<V> entries = new ArrayList<>();
+        for(Entry<K,V> entry : list){
+            entries.add(entry.getValue());
+        }
+        return entries;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return Set.of();
+        return new HashSet<>(list);
+    }
+
+    public void printAll() {
+        for (Map.Entry<K, V> entry : list) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
     }
 }
