@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -7,14 +8,16 @@ import java.util.Set;
 
 public class myMap<K,V> implements Map<K,V> {
 
+    private List<Entry<K,V>> list = new ArrayList<>();
+
     @Override
     public int size() {
-        return 0;
+        return list.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return list.isEmpty();
     }
 
     @Override
