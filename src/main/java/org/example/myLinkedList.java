@@ -1,13 +1,12 @@
 package org.example;
 
-import java.util.AbstractSequentialList;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class myLinkedList<E> extends AbstractSequentialList<E>
-        implements List<E>, Deque<E>, Cloneable, java.io.Serializable {
+public class myLinkedList<E> implements List<E> {
 
     Node<E> head;
     Node<E> tail;
@@ -24,43 +23,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     }
 
     @Override
-    public void addFirst(E e) {
-        Node<E> p = new Node<>(e, null, head);
-        if (isEmpty()) {
-            head = tail = p;
-        } else {
-            head.prev = p;
-            p.next = head;
-            head = p;
-        }
-        size++;
-    }
-
-    @Override
-    public void addLast(E e) {
-        Node<E> p = new Node<>(e, tail, null);
-        if (isEmpty()) {
-            head = tail = p;
-        } else {
-            tail.next = p;
-            tail = p;
-        }
-        size++;
-    }
-
-    @Override
-    public boolean offerFirst(E e) {
-        addFirst(e);
-        return true;
-    }
-
-    @Override
-    public boolean offerLast(E e) {
-        addLast(e);
-        return true;
-    }
-
-    @Override
     public E get(int index) {
         Node<E> p = head;
         int c = 0;
@@ -72,93 +34,204 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     }
 
     @Override
-    public E removeFirst() {
-        E element = head.item;   // Lưu giá trị cần trả về
-        Node<E> next = head.next;
-        if (next == null) {      // Nếu chỉ có 1 node
-            head = tail = null;
-        } else {
-            next.prev = null;
-            head = next;
-        }
-        size--;
-        return element;
-    }
-
-    @Override
-    public E removeLast() {
-        E element = tail.item;
-        Node<E> prev = tail.prev;
-        if (prev == null) { // chỉ 1 phần tử
-            head = tail = null;
-        } else {
-            prev.next = null;
-            tail = prev;
-        }
-        size--;
-        return element;
-    }
-
-    @Override
-    public E pollFirst() {
+    public E set(int index, E element) {
         Node<E> p = head;
-        return p == null ? null : removeFirst();
+        int c = 0;
+        while (p != null && c < index) {
+            p = p.next;
+            c++;
+        }
+        if (c == index) {
+            E old = p.item;
+            p.item = element;
+            return old;
+        }
+        return null;
     }
 
     @Override
-    public E pollLast() {
-        Node<E> p = tail;
-        return p == null ? null : removeLast();
+    public boolean contains(Object o) {
+        Node<E> current = head;
+        while (current != null) {
+            if (o != null && current.item.equals(o)) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
     }
 
     @Override
-    public E getFirst() {
-        return head.item;
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            Node<E> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public E next() {
+                E value = current.item;
+                current = current.next;
+                return value;
+            }
+        };
     }
 
     @Override
-    public E getLast() {
-        return tail.item;
+    public Object[] toArray() {
+        Object[] array = new Object[size];
+        int i = 0;
+        Node<E> p = head;
+        while (p != null) {
+            array[i++] = p.item;
+            p = p.next;
+        }
+        return array;
     }
 
     @Override
-    public E peekFirst() {
-        return (head == null) ? null : head.item;
+    public <T> T[] toArray(T[] a) {
+        Node<E> p = head;
+        int i = 0;
+        Object[] result = a;
+        while (p != null) {
+            result[i++] = p.item;
+            p = p.next;
+        }
+        if (a.length > size) {
+            // Đánh dấu kết thúc nếu mảng lớn hơn size
+            a[size] = null;
+        }
+        return a;
     }
 
     @Override
-    public E peekLast() {
-        return (tail == null) ? null : tail.item;
+    public void add(int index, E element) {
+        Node<E> newNode = new Node<>(element);
+        if (index == 0) {
+            newNode.next = head;
+            head = newNode;
+        } else {
+            Node<E> prev = head;
+            for (int i = 0; i < index - 1; i++) {
+                prev = prev.next;
+            }
+            newNode.next = prev.next;
+            prev.next = newNode;
+        }
+        size++;
     }
 
     @Override
-    public E remove() {
-        return removeFirst();
+    public E remove(int index) {
+        Node<E> removed;
+        if (index == 0) {
+            removed = head;
+            head = head.next;
+        } else {
+            Node<E> prev = head;
+            for (int i = 0; i < index - 1; i++) {
+                prev = prev.next;
+            }
+            removed = prev.next;
+            prev.next = prev.next.next;
+        }
+        size--;
+        return removed.item;
     }
 
     @Override
-    public E poll() {
-        return head == null ? null : removeFirst();
+    public int indexOf(Object o) {
+        Node<E> current = head;
+        int c = 0;
+        while (current != null) {
+            if (o != null && current.item.equals(o)) {
+                return c;
+            }
+            c++;
+            current = current.next;
+        }
+        return -1;
     }
 
     @Override
-    public E element() {
-        return getFirst();
+    public int lastIndexOf(Object o) {
+        Node<E> current = tail;
+        int c = size;
+        for (int i = size - 1; i >= 0; i--) {
+            if (o == null ? current.item == null : o.equals(current.item)) {
+                return i;
+            }
+            current = current.prev;
+        }
+//        while (current != null) {
+//            if (o != null && current.item.equals(o)) {
+//                return c;
+//            }
+//            current = current.prev;
+//            c--;
+//        }
+        return -1;
     }
 
     @Override
-    public E peek() {
-        return (head == null) ? null : head.item;
-    }
+    public ListIterator<E> listIterator() {
+        return new ListIterator<E>() {
+            Node<E> current = head;
+            Node<E> lastIndex = null;
+            int nextIndex = 0;
 
-    @Override
-    public void push(E e) {
-        addFirst(e);
-    }
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
 
-    @Override
-    public E pop() {
-        return removeFirst();
+            @Override
+            public E next() {
+                E value = current.item;
+                current = current.next;
+                nextIndex++;
+                return value;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return nextIndex > 0;
+            }
+
+            @Override
+            public E previous() {
+                return null;
+            }
+
+            @Override
+            public int nextIndex() {
+                return nextIndex;
+            }
+
+            @Override
+            public int previousIndex() {
+                return nextIndex -1;
+            }
+
+            @Override
+            public void remove() {
+
+            }
+
+            @Override
+            public void set(E e) {
+
+            }
+
+            @Override
+            public void add(E e) {
+
+            }
+        };
     }
 
     @Override
@@ -185,6 +258,71 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
     }
 
     @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object e : c) {
+            if (!this.contains(e)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        boolean changed = false;
+        for (E e : c) {
+            if (this.add(e)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        if (index < 0 || index > size) throw new IndexOutOfBoundsException();
+        boolean changed = false;
+        int i = index;
+        for (E e : c) {
+            this.add(i++, e);
+            changed = true;
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean changed = false;
+        Iterator<E> it = this.iterator();
+        while (it.hasNext()) {
+            if (c.contains(it.next())) {
+                it.remove();
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean changed = false;
+        Iterator<E> it = this.iterator();
+        while (it.hasNext()) {
+            if (!c.contains(it.next())) {
+                it.remove();
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    @Override
+    public void clear() {
+        head = null;
+        size = 0;
+    }
+
+    @Override
     public boolean add(E e) {
         Node<E> newNode = new Node<>(e, tail, null);
         if (tail == null) {
@@ -195,60 +333,6 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
         }
         size++;
         return true;
-    }
-
-    @Override
-    public boolean offer(E e) {
-        return add(e);
-    }
-
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        return remove(o);
-    }
-
-    @Override
-    public boolean removeLastOccurrence(Object o) {
-        Node<E> node = tail;
-        while (node != null) {
-            if (node.item == null ? null : o.equals(node.item)) {
-                if (node.prev == null) { // node là head
-                    head = node.next;
-                } else {
-                    node.prev.next = node.next;
-                }
-                if (node.next == null) { // node là tail
-                    tail = node.prev;
-                } else {
-                    node.next.prev = node.prev;
-                }
-                size--;
-                return true;
-            }
-            node = node.prev;
-        }
-
-        return false;
-    }
-
-    @Override
-    public Iterator<E> descendingIterator() {
-        return new Iterator<E>() {
-
-            Node<E> current = tail;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public E next() {
-                E element = current.item;
-                current = current.prev;
-                return element;
-            }
-        };
     }
 
     @Override
@@ -317,6 +401,20 @@ public class myLinkedList<E> extends AbstractSequentialList<E>
 
             }
         };
+    }
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        List<E> list = new ArrayList<E>();
+        Node<E> current = head;
+        for (int i = 0; i < fromIndex; i++) {
+            current = current.next;
+        }
+        for (int i = fromIndex; i < toIndex + 1; i++) {
+            list.add(current.item);
+            current = current.next;
+        }
+        return list;
     }
 
     public void printLinkedList() {
