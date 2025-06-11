@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class myMap<K,V> implements Map<K,V> {
@@ -19,16 +20,6 @@ public class myMap<K,V> implements Map<K,V> {
     @Override
     public boolean isEmpty() {
         return list.isEmpty();
-    }
-
-    @Override
-    public boolean containsKey(Object key) {
-        return false;
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return false;
     }
 
     @Override
@@ -55,11 +46,6 @@ public class myMap<K,V> implements Map<K,V> {
     }
 
     @Override
-    public V remove(Object key) {
-        return null;
-    }
-
-    @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
             put(entry.getKey(), entry.getValue());
@@ -69,6 +55,31 @@ public class myMap<K,V> implements Map<K,V> {
     @Override
     public void clear() {
         list.clear();
+    }
+
+    @Override
+    public V remove(Object key) {
+        return null;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        for (Entry<K,V> entry : list) {
+            if (Objects.equals(entry.getKey(), key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        for (Entry<K,V> entry : list) {
+            if (Objects.equals(entry.getValue(), value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
