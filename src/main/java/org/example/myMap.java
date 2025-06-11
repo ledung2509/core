@@ -80,10 +80,12 @@ public class myMap<K,V> implements Map<K,V> {
 
     @Override
     public V remove(Object key) {
-        for (Entry<K,V> entry : list) {
+        for (var it = list.iterator(); it.hasNext(); ) {
+            Entry<K, V> entry = it.next();
             if (Objects.equals(entry.getKey(), key)) {
                 V oldValue = entry.getValue();
-                list.remove(oldValue);
+                it.remove();
+                return oldValue;
             }
         }
         return null;
