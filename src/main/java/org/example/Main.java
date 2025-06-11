@@ -81,75 +81,39 @@ public class Main {
 //        System.out.println("toArray(T[]): " + Arrays.toString(arr));
 
         myLinkedList list = new myLinkedList();
-        //Add element first
-        list.addFirst("A");
-        list.addFirst("B");
-        list.addFirst("D");
-        list.addFirst("C");
-        //Add element last
-        list.addLast("E");
-        list.addLast("F");
-        list.addLast("G");
-        list.addLast("H");
+
+        list.add("A");
+        list.add("B");
+        list.add("A");
+        list.add("D");
+        list.add("E");
 
         list.printLinkedList();
 
         //Size
         System.out.println("Size: "+list.size());
 
-        //Get first element
-        System.out.println("Element first: " + list.getFirst());
-
-        //Get last element
-        System.out.println("Element last: " + list.getLast());
-
         //Get index
-        System.out.println("Get index: " + list.get(3));
+        System.out.println("Get index: " + list.get(0));
 
-//        //Peek first
-//        System.out.println("Peek first: " + list.peekFirst());
-//
-//        //Peek last
-//        System.out.println("Peek last: " + list.peekLast());
-//
-//        //Remove first
-//        System.out.println("Remove first: " + list.removeFirst());
-//        list.printLinkedList();
-//
-//        //Remove last
-//        System.out.println("Remove last: " + list.removeLast());
-//        list.printLinkedList();
-//
-//        //Poll first
-//        System.out.println("Poll first: " + list.pollFirst());
-//
-//        //Poll last
-//        System.out.println("Poll last: " + list.pollLast());
-
-        //Remove
-        System.out.println("Remove: " + list.removeFirstOccurrence("E"));
+        //Set index
+        System.out.println("Set index: " + list.set(3, "E"));
         list.printLinkedList();
-        System.out.println("Get index: " + list.get(4));
-
-        //Add
-        System.out.println("Add: " + list.add("FF"));
-        list.printLinkedList();
-
-        //Descending Iterator
-        Iterator<String> it = list.descendingIterator();
-        while (it.hasNext()) {
-            System.out.print(it.next() + " ");
-        }
-        System.out.println();
 
         //List Iterator
         Iterator<String> it1 = list.listIterator(4);
         while (it1.hasNext()) {
-            System.out.print(it1.next() + " ");
+            System.out.println(it1.next() + " ");
         }
-        System.out.println();
 
-        System.out.println("Remove last: " + list.removeLastOccurrence("H"));
-        list.printLinkedList();
+        //Index Of
+        System.out.println("Index of:" + list.indexOf("A"));
+
+        //Last index Of
+        System.out.println("Last index of:" + list.lastIndexOf("A"));
+
+        //Sub list
+        List<String> list1 = list.subList(1, 3);
+        System.out.println("SubList(1,3):" + list1);
     }
 }
