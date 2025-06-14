@@ -131,15 +131,14 @@ public class Main {
         System.out.println("get:");
         System.out.println("apple = " + map.get("apple"));
         System.out.println("banana = " + map.get("banana"));
-        System.out.println("notfound = " + map.get("notfound"));
         // containsKey
         System.out.println("containsKey:");
-        System.out.println("apple? " + map.containsKey("apple"));
-        System.out.println("grape? " + map.containsKey("grape"));
+        System.out.println("apple = " + map.containsKey("apple"));
+        System.out.println("grape = " + map.containsKey("grape"));
         // containsValue
         System.out.println("containsValue:");
-        System.out.println("20? " + map.containsValue(20));
-        System.out.println("100? " + map.containsValue(100));
+        System.out.println("20 = " + map.containsValue(20));
+        System.out.println("100 = " + map.containsValue(100));
         // size
         System.out.println("size: " + map.size());
         //isEmpty
@@ -147,14 +146,14 @@ public class Main {
         // remove
         System.out.println("remove:");
         System.out.println("remove banana: " + map.remove("banana")); // 20
-        System.out.println("after remove, contains banana? " + map.containsKey("banana"));
+        System.out.println("after remove, contains banana = " + map.containsKey("banana"));
         // putAll
         System.out.println("putAll:");
         myMap<String, Integer> map2 = new myMap<>();
         map2.put("kiwi", 99);
         map2.put("melon", 88);
         map.putAll(map2);
-        System.out.println("after putAll, contains kiwi? " + map.containsKey("kiwi"));
+        System.out.println("after putAll, contains kiwi = " + map.containsKey("kiwi"));
         // keySet
         System.out.println("keySet:");
         System.out.println(map.keySet());
@@ -167,7 +166,7 @@ public class Main {
             System.out.println(entry.getKey() + " = " + entry.getValue());
         }
         // clear
-        System.out.println("\nclear:");
+        System.out.println("clear:");
         map.clear();
         System.out.println("size after clear: " + map.size());
         System.out.println("isEmpty after clear: " + map.isEmpty());

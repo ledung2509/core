@@ -13,10 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MapTest {
 
-    myMap<String, Integer> map = new myMap<>();
-
     @Test
     public void testPut() {
+        myMap<String, Integer> map = new myMap<>();
         assertNull(map.put("a", 1));
         assertEquals(1, map.get("a"));
         assertEquals(1, map.put("a", 2));
