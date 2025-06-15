@@ -1,10 +1,5 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 public class Main {
@@ -117,58 +112,6 @@ public class Main {
 //        List<String> list1 = list.subList(1, 3);
 //        System.out.println("SubList(1,3):" + list1);
 
-        myMap<String, Integer> map = new myMap<>();
 
-        // put
-        System.out.println("put:");
-        map.put("apple", 10);
-        map.put("banana", 20);
-        map.put("orange", 30);
-        //Print All
-        System.out.println("Print all:");
-        map.printAll();
-        // get
-        System.out.println("get:");
-        System.out.println("apple = " + map.get("apple"));
-        System.out.println("banana = " + map.get("banana"));
-        // containsKey
-        System.out.println("containsKey:");
-        System.out.println("apple = " + map.containsKey("apple"));
-        System.out.println("grape = " + map.containsKey("grape"));
-        // containsValue
-        System.out.println("containsValue:");
-        System.out.println("20 = " + map.containsValue(20));
-        System.out.println("100 = " + map.containsValue(100));
-        // size
-        System.out.println("size: " + map.size());
-        //isEmpty
-        System.out.println("isEmpty: " + map.isEmpty());
-        // remove
-        System.out.println("remove:");
-        System.out.println("remove banana: " + map.remove("banana")); // 20
-        System.out.println("after remove, contains banana = " + map.containsKey("banana"));
-        // putAll
-        System.out.println("putAll:");
-        myMap<String, Integer> map2 = new myMap<>();
-        map2.put("kiwi", 99);
-        map2.put("melon", 88);
-        map.putAll(map2);
-        System.out.println("after putAll, contains kiwi = " + map.containsKey("kiwi"));
-        // keySet
-        System.out.println("keySet:");
-        System.out.println(map.keySet());
-        // values
-        System.out.println("values:");
-        System.out.println(map.values());
-        // entrySet
-        System.out.println("entrySet:");
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-        }
-        // clear
-        System.out.println("clear:");
-        map.clear();
-        System.out.println("size after clear: " + map.size());
-        System.out.println("isEmpty after clear: " + map.isEmpty());
     }
 }
