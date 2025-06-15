@@ -6,13 +6,12 @@ import java.util.Objects;
 
 public class EntryMap<K, V> implements Map.Entry<K, V> {
 
-    final int hash;
     final K key;
     V value;
     EntryMap<K, V> next;
 
-    public EntryMap(int hash, K key, V value, EntryMap<K, V> next) {
-        this.hash = hash;
+    public EntryMap(K key, V value, EntryMap<K, V> next) {
+
         this.key = key;
         this.value = value;
         this.next = next;
