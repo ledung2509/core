@@ -117,48 +117,13 @@ public class Main {
         MyMap<String, Integer> myMap = new MyMap<>();
 
         // Thêm các phần tử vào map
-        System.out.println("Put: " + myMap.put("apple", 10)); // null
-        System.out.println("Put: " + myMap.put("banana", 20)); // null
-        System.out.println("Put: " + myMap.put("orange", 30)); // null
-        System.out.println("Put (overwrite): " + myMap.put("banana", 50)); // 20
+        myMap.put("A1", 100);
+        myMap.put("B2", 200);
+        myMap.put("C3", 300);
+        myMap.put("FB", 123); // update giá trị A1
+        myMap.put("Ea", 456); // cố tình gây collision với A1 (nếu cùng hash)
 
-        // Lấy giá trị theo key
-        System.out.println("Get 'apple': " + myMap.get("apple")); // 10
-        System.out.println("Get 'banana': " + myMap.get("banana")); // 50
-
-        // Kiểm tra sự tồn tại của key và value
-        System.out.println("Contains key 'banana': " + myMap.containsKey("banana")); // true
-        System.out.println("Contains key 'grape': " + myMap.containsKey("grape")); // false
-        System.out.println("Contains value 30: " + myMap.containsValue(30)); // true
-        System.out.println("Contains value 99: " + myMap.containsValue(99)); // false
-
-        // Xóa một phần tử
-        System.out.println("Remove 'apple': " + myMap.remove("apple")); // 10 (nên trả về giá trị cũ nhưng code hiện tại trả null)
-        System.out.println("Contains key 'apple' after remove: " + myMap.containsKey("apple")); // false
-
-        // Duyệt keySet, values, entrySet
-        Set<String> keys = myMap.keySet();
-        System.out.println("Key set: " + keys);
-
-        Collection<Integer> values = myMap.values();
-        System.out.println("Values: " + values);
-
-        Set<Map.Entry<String, Integer>> entries = myMap.entrySet();
-        System.out.println("Entries: ");
-        for (Map.Entry<String, Integer> entry : entries) {
-            System.out.println(entry.getKey() + " -> " + entry.getValue());
-        }
-
-        // Thêm nhiều phần tử bằng putAll
-        MyMap<String, Integer> anotherMap = new MyMap<>();
-        anotherMap.put("grape", 70);
-        anotherMap.put("lemon", 80);
-        myMap.putAll(anotherMap);
-        System.out.println("After putAll: " + myMap.keySet());
-
-        // Xóa tất cả phần tử
-        myMap.clear();
-        System.out.println("IsEmpty after clear: " + myMap.isEmpty());
+        myMap.printDisplay();
 
     }
 }

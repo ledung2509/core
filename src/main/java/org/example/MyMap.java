@@ -80,7 +80,8 @@ public class MyMap<K, V> implements Map<K, V> {
         int index = hash(key);
         EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
         while (entry != null) {
-            if (Objects.equals(entry.getKey(), key)) {
+            //Kiểm tra có trùng key
+            if (key.equals(entry.getKey())) {
                 V oldValue = entry.getValue();
                 entry.setValue(value);
                 return oldValue;
@@ -165,5 +166,17 @@ public class MyMap<K, V> implements Map<K, V> {
         }
 
         return entries;
+    }
+
+    public void printDisplay() {
+        for (int i = 0; i < capacity; i++) {
+            System.out.print("Bucket " + i + ": ");
+            EntryMap<K, V> current = (EntryMap<K, V>) table[i];
+            while (current != null) {
+                System.out.print("[" + current.key + ":" + current.value + "] -> ");
+                current = current.next;
+            }
+            System.out.println("");
+        }
     }
 }
