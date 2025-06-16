@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -99,11 +100,13 @@ public class MyMap<K, V> implements Map<K, V> {
         EntryMap<K, V> prev = null;
         while (entry != null) {
             if (Objects.equals(entry.getKey(), key)) {
-                if (prev != null) {
+                if (prev == null) {
                     table[index] = entry.next;
                 } else {
                     prev.next = entry.next;
                 }
+                size--;
+                return entry.getValue();
             }
             prev = entry;
             entry = entry.next;
@@ -131,7 +134,7 @@ public class MyMap<K, V> implements Map<K, V> {
             EntryMap<K, V> map = (EntryMap<K, V>) entry;
             while (map != null) {
                 keys.add(entry.getKey());
-                entry = map.next;
+                map = map.next;
             }
         }
         return keys;
@@ -139,11 +142,28 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public Collection<V> values() {
-        return List.of();
+        List<V> values = new ArrayList<>();
+        for (Entry<K, V> entry : table) {
+            EntryMap<K, V> list = (EntryMap<K, V>) entry;
+            while (list != null) {
+                values.add(list.getValue());
+                list = list.next;
+            }
+        }
+        return values;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return Set.of();
+        Set<Entry<K, V>> entries = new HashSet<>();
+        for (Entry<K, V> entry : table) {
+            EntryMap<K, V> set = (EntryMap<K, V>) entry;
+            while (set != null) {
+                entries.add(set);
+                set = set.next;
+            }
+        }
+
+        return entries;
     }
 }
