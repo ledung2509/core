@@ -1,6 +1,8 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,11 +36,28 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
+        int index = hash(key);
+        EntryMap<K, V> map = (EntryMap<K, V>) table[index];
+        while (map != null) {
+            if (Objects.equals(map.getKey(), key)) {
+                return true;
+            }
+            map = map.next;
+        }
         return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
+        for (Entry<K, V> entry : table) {
+            EntryMap<K, V> map = (EntryMap<K, V>) entry;
+            while (map != null) {
+                if (Objects.equals(map.getValue(), value)) {
+                    return true;
+                }
+                map = map.next;
+            }
+        }
         return false;
     }
 
@@ -67,7 +86,7 @@ public class MyMap<K, V> implements Map<K, V> {
             }
             entry = entry.next;
         }
-        Entry<K, V> newEntry = new EntryMap<>(key, value,(EntryMap<K, V>) table[index]);
+        Entry<K, V> newEntry = new EntryMap<>(key, value, (EntryMap<K, V>) table[index]);
         table[index] = newEntry;
         size++;
         return null;
@@ -75,22 +94,47 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
+        int index = hash(key);
+        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
+        EntryMap<K, V> prev = null;
+        while (entry != null) {
+            if (Objects.equals(entry.getKey(), key)) {
+                if (prev != null) {
+                    table[index] = entry.next;
+                } else {
+                    prev.next = entry.next;
+                }
+            }
+            prev = entry;
+            entry = entry.next;
+        }
         return null;
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-
+        for (Entry<? extends K, ? extends V> entry : m.entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
     public void clear() {
-
+        Arrays.fill(table, null);
+        size = 0;
     }
 
     @Override
     public Set<K> keySet() {
-        return Set.of();
+        Set<K> keys = new HashSet<>();
+        for (Entry<K, V> entry : table) {
+            EntryMap<K, V> map = (EntryMap<K, V>) entry;
+            while (map != null) {
+                keys.add(entry.getKey());
+                entry = map.next;
+            }
+        }
+        return keys;
     }
 
     @Override
