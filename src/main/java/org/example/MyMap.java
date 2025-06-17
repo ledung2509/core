@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import static java.util.Objects.hash;
-
 public class MyMap<K, V> implements Map<K, V> {
 
     private final int capacity = 16;
@@ -37,81 +35,31 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        int index = hash(key);
-        EntryMap<K, V> map = (EntryMap<K, V>) table[index];
-        while (map != null) {
-            if (Objects.equals(map.getKey(), key)) {
-                return true;
-            }
-            map = map.next;
-        }
+
         return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        for (Entry<K, V> entry : table) {
-            EntryMap<K, V> map = (EntryMap<K, V>) entry;
-            while (map != null) {
-                if (Objects.equals(map.getValue(), value)) {
-                    return true;
-                }
-                map = map.next;
-            }
-        }
+
         return false;
     }
 
     @Override
     public V get(Object key) {
-        int index = hash(key);
-        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
-        while (entry != null) {
-            if (Objects.equals(entry.getKey(), key)) {
-                return entry.getValue();
-            }
-            entry = entry.next;
-        }
+
         return null;
     }
 
     @Override
     public V put(K key, V value) {
-        int index = hash(key);
-        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
-        while (entry != null) {
-            //Kiểm tra có trùng key
-            if (key.equals(entry.getKey())) {
-                V oldValue = entry.getValue();
-                entry.setValue(value);
-                return oldValue;
-            }
-            entry = entry.next;
-        }
-        Entry<K, V> newEntry = new EntryMap<>(key, value, (EntryMap<K, V>) table[index]);
-        table[index] = newEntry;
-        size++;
+
         return null;
     }
 
     @Override
     public V remove(Object key) {
-        int index = hash(key);
-        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
-        EntryMap<K, V> prev = null;
-        while (entry != null) {
-            if (Objects.equals(entry.getKey(), key)) {
-                if (prev == null) {
-                    table[index] = entry.next;
-                } else {
-                    prev.next = entry.next;
-                }
-                size--;
-                return entry.getValue();
-            }
-            prev = entry;
-            entry = entry.next;
-        }
+
         return null;
     }
 
@@ -171,12 +119,11 @@ public class MyMap<K, V> implements Map<K, V> {
     public void printDisplay() {
         for (int i = 0; i < capacity; i++) {
             System.out.print("Bucket " + i + ": ");
-            EntryMap<K, V> current = (EntryMap<K, V>) table[i];
-            while (current != null) {
-                System.out.print("[" + current.key + ":" + current.value + "] -> ");
-                current = current.next;
+            Entry<K, V> entry = table[i];
+            if (entry != null) {
+                System.out.print("[" + entry.getKey() + ":" + entry.getValue() + "]");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 }
