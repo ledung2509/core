@@ -35,25 +35,60 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-
+        int index = hash(key);
+        EntryMap<K, V> map = (EntryMap<K, V>) table[index];
+        while (map != null) {
+            if (Objects.equals(map.getKey(), key)) {
+                return true;
+            }
+            map = map.next;
+        }
         return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
-
+        for (Entry<K, V> entry : table) {
+            EntryMap<K, V> map = (EntryMap<K, V>) entry;
+            while (map != null) {
+                if (Objects.equals(map.getValue(), value)) {
+                    return true;
+                }
+                map = map.next;
+            }
+        }
         return false;
     }
 
     @Override
     public V get(Object key) {
-
+        int index = hash(key);
+        EntryMap<K, V> map = (EntryMap<K, V>) table[index];
+        while (map != null) {
+            if (Objects.equals(map.getKey(), key)) {
+                return map.getValue();
+            }
+            map = map.next;
+        }
         return null;
     }
 
     @Override
     public V put(K key, V value) {
-
+        int index = hash(key);
+        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
+        while (entry != null) {
+            //Kiểm tra có trùng key
+            if (key.equals(entry.getKey())) {
+                V oldValue = entry.getValue();
+                entry.setValue(value);
+                return oldValue;
+            }
+            entry = entry.next;
+        }
+        Entry<K, V> newEntry = new EntryMap<>(key, value, (EntryMap<K, V>) table[index]);
+        table[index] = newEntry;
+        size++;
         return null;
     }
 
