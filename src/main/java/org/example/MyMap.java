@@ -94,7 +94,22 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
-
+        int index = hash(key);
+        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
+        EntryMap<K, V> prev = null;
+        while (entry != null) {
+            if (Objects.equals(entry.getKey(), key)) {
+                if (prev == null) {
+                    table[index] = entry.next;
+                } else {
+                    prev.next = entry.next;
+                }
+                size--;
+                return entry.getValue();
+            }
+            prev = entry;
+            entry = entry.next;
+        }
         return null;
     }
 
