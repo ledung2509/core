@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import static java.util.Objects.hash;
-
 public class MyMap<K, V> implements Map<K, V> {
 
     private final int capacity = 16;
@@ -65,12 +63,12 @@ public class MyMap<K, V> implements Map<K, V> {
     @Override
     public V get(Object key) {
         int index = hash(key);
-        EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
-        while (entry != null) {
-            if (Objects.equals(entry.getKey(), key)) {
-                return entry.getValue();
+        EntryMap<K, V> map = (EntryMap<K, V>) table[index];
+        while (map != null) {
+            if (Objects.equals(map.getKey(), key)) {
+                return map.getValue();
             }
-            entry = entry.next;
+            map = map.next;
         }
         return null;
     }
@@ -192,12 +190,11 @@ public class MyMap<K, V> implements Map<K, V> {
     public void printDisplay() {
         for (int i = 0; i < capacity; i++) {
             System.out.print("Bucket " + i + ": ");
-            EntryMap<K, V> current = (EntryMap<K, V>) table[i];
-            while (current != null) {
-                System.out.print("[" + current.key + ":" + current.value + "] -> ");
-                current = current.next;
+            Entry<K, V> entry = table[i];
+            if (entry != null) {
+                System.out.print("[" + entry.getKey() + ":" + entry.getValue() + "]");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 }
