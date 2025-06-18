@@ -33,17 +33,22 @@ public class MyMap<K, V> implements Map<K, V> {
         return size == 0;
     }
 
-    @Override
-    public boolean containsKey(Object key) {
+    public Entry<K, V> getEntryKey(Object key) {
         int index = hash(key);
         EntryMap<K, V> map = (EntryMap<K, V>) table[index];
         while (map != null) {
             if (Objects.equals(map.getKey(), key)) {
-                return true;
+                return map;
             }
             map = map.next;
         }
-        return false;
+        return null;
+    }
+
+
+    @Override
+    public boolean containsKey(Object key) {
+        return getEntryKey(key) != null;
     }
 
     @Override
@@ -62,15 +67,8 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
-        int index = hash(key);
-        EntryMap<K, V> map = (EntryMap<K, V>) table[index];
-        while (map != null) {
-            if (Objects.equals(map.getKey(), key)) {
-                return map.getValue();
-            }
-            map = map.next;
-        }
-        return null;
+        Entry<K, V> entry = getEntryKey(key);
+        return entry == null ? null : entry.getValue();
     }
 
     public void resize() {
