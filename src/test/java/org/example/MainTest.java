@@ -9,18 +9,18 @@ import java.util.ListIterator;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class MainTest {
+ class MainTest {
 
-    MyArrayList list = new MyArrayList();
+     MyArrayList list = new MyArrayList();
 
     @Test
-    public void testConstructorAndSize() {
+     void testConstructorAndSize() {
         assertEquals(0, list.size());
         assertTrue(list.isEmpty());
     }
 
     @Test
-    public void testContains() {
+     void testContains() {
         list.add(1);
         list.add(2);
         assertTrue(list.contains(1));
@@ -29,7 +29,7 @@ public class MainTest {
     }
 
     @Test
-    public void testAddAndGet() {
+     void testAddAndGet() {
         assertTrue(list.add("A"));
         assertTrue(list.add("V"));
         assertTrue(list.add("E"));
@@ -40,7 +40,7 @@ public class MainTest {
     }
 
     @Test
-    public void testSet() {
+     void testSet() {
         list.add("A");
         list.add("B");
         assertEquals("B", list.set(1, "C"));
@@ -48,7 +48,7 @@ public class MainTest {
     }
 
     @Test
-    public void testToArray() {
+     void testToArray() {
         list.add(1);
         list.add(2);
         Object[] arr = list.toArray();
@@ -56,7 +56,7 @@ public class MainTest {
     }
 
     @Test
-    public void testClear() {
+     void testClear() {
         list.add(1);
         list.add(2);
         list.clear();
@@ -65,7 +65,7 @@ public class MainTest {
     }
 
     @Test
-    public void testRemoveByIndex() {
+     void testRemoveByIndex() {
         list.add(1);
         list.add(2);
         list.add(3);
@@ -76,7 +76,7 @@ public class MainTest {
     }
 
     @Test
-    public void testContainsAll() {
+     void testContainsAll() {
         list.add(1);
         list.add(2);
         List<Integer> other = Arrays.asList(1,2);
@@ -86,7 +86,7 @@ public class MainTest {
     }
 
     @Test
-    public void testAddAll() {
+     void testAddAll() {
         List<Integer> other = Arrays.asList(1,2,3);
         assertTrue(list.addAll(other));
         assertEquals(3, list.size());
@@ -94,7 +94,7 @@ public class MainTest {
     }
 
     @Test
-    public void testAddAllAtIndex() {
+     void testAddAllAtIndex() {
         list.add(1);
         list.add(4);
         List<Integer> other = Arrays.asList(2,3);
@@ -103,7 +103,7 @@ public class MainTest {
     }
 
     @Test
-    public void testRemoveAll() {
+     void testRemoveAll() {
         list.add(1);
         list.add(2);
         list.add(3);
@@ -114,7 +114,7 @@ public class MainTest {
     }
 
     @Test
-    public void testRetainAll() {
+     void testRetainAll() {
         list.add(1);
         list.add(2);
         list.add(3);

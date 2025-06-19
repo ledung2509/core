@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,13 +7,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.RandomAccess;
 
-public class MyArrayList<E> extends AbstractList<E>
-        implements java.util.List<E>, RandomAccess, Cloneable, java.io.Serializable {
+public class MyArrayList<E> implements java.util.List<E> {
 
     private Object[] elements;
-    private int size = 0;
+    private int size;
 
     public MyArrayList() {
         this.elements = new Object[10];
@@ -51,12 +48,20 @@ public class MyArrayList<E> extends AbstractList<E>
         return Arrays.copyOf(elements, size);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
+        Class<?> componentType = a.getClass().getComponentType();
         if (a.length < size) {
-            return (T[]) Arrays.copyOf(elements, size, a.getClass());
+            T[] result = (T[]) java.lang.reflect.Array.newInstance(componentType, size);
+            for (int i = 0; i < size; i++) {
+                result[i] = (T) elements[i];
+            }
+            return result;
         }
-        System.arraycopy(elements, 0, a, 0, size);
+        for (int i = 0; i < size; i++) {
+            a[i] = (T) elements[i];
+        }
         if (a.length > size) {
             a[size] = null;
         }
@@ -132,14 +137,13 @@ public class MyArrayList<E> extends AbstractList<E>
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        rangeCheckForAdd(index); // kiểm tra hợp lệ
+        rangeCheckForAdd(index);
         Object[] toAdd = c.toArray();
         int numNew = toAdd.length;
         if (numNew == 0) return false;
 
         ensureCapacity(size + numNew);
 
-        // Dời phần tử từ index sang phải
         System.arraycopy(elements, index, elements, index + numNew, size - index);
 
         // Chèn phần tử mới
@@ -151,10 +155,9 @@ public class MyArrayList<E> extends AbstractList<E>
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i >= 0; i--) {
             if (c.contains(elements[i])) {
                 remove(i);
-                i--; // lùi lại 1 vì sau khi xóa, các phần tử dồn lại
                 modified = true;
             }
         }
@@ -164,10 +167,9 @@ public class MyArrayList<E> extends AbstractList<E>
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean modified = false;
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i >= 0; i--) {
             if (!c.contains(elements[i])) {
                 remove(i);
-                i--;
                 modified = true;
             }
         }
@@ -180,6 +182,7 @@ public class MyArrayList<E> extends AbstractList<E>
         size = 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E get(int index) {
         if (index < 0 || index >= size) {
@@ -188,6 +191,7 @@ public class MyArrayList<E> extends AbstractList<E>
         return (E) elements[index];
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E set(int index, E element) {
         Objects.checkIndex(index, size);
@@ -205,13 +209,13 @@ public class MyArrayList<E> extends AbstractList<E>
             elements = Arrays.copyOf(elements, elements.length * 2);
         }
 
-        //  Dời các phần tử từ vị trí index sang phải
         System.arraycopy(elements, index, elements, index + 1, size - index);
 
         elements[index] = element;
         size++;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E remove(int index) {
         if (index < 0 || index >= size) {
@@ -231,15 +235,13 @@ public class MyArrayList<E> extends AbstractList<E>
 
     @Override
     public int indexOf(Object o) {
-        if (o == null) {
-            for (int i = 0; i < size; i++) {
-                if (elements[i].equals(o)) {
+        for (int i = 0; i < size; i++) {
+            if (o == null) {
+                if (elements[i] == null) {
                     return i;
                 }
-            }
-        } else {
-            for (int i = 0; i < size; i++) {
-                if (o.equals(elements[i])) {
+            } else {
+                if (elements[i].equals(o)) {
                     return i;
                 }
             }
@@ -247,16 +249,16 @@ public class MyArrayList<E> extends AbstractList<E>
         return -1;
     }
 
-    int lastIndexOfRange(Object o, int start, int end) {
+    int lastIndexOfRange(Object o, int end) {
         Object[] es = elements;
         if (o == null) {
-            for (int i = end - 1; i >= start; i--) {
+            for (int i = end - 1; i >= 0; i--) {
                 if (es[i] == null) {
                     return i;
                 }
             }
         } else {
-            for (int i = end - 1; i >= start; i--) {
+            for (int i = end - 1; i >= 0; i--) {
                 if (o.equals(es[i])) {
                     return i;
                 }
@@ -267,7 +269,7 @@ public class MyArrayList<E> extends AbstractList<E>
 
     @Override
     public int lastIndexOf(Object o) {
-        return lastIndexOfRange(o, 0, size);
+        return lastIndexOfRange(o, size);
     }
 
     @Override
@@ -277,9 +279,9 @@ public class MyArrayList<E> extends AbstractList<E>
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        rangeCheckForAdd(index); // Cho phép index == size
+        rangeCheckForAdd(index);
 
-        return new ListIterator<E>() {
+        return new ListIterator<>() {
             int cursor = index;
             int lastRet = -1;
 
@@ -288,6 +290,7 @@ public class MyArrayList<E> extends AbstractList<E>
                 return cursor < size;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public E next() {
                 if (!hasNext()) throw new NoSuchElementException();
@@ -300,6 +303,7 @@ public class MyArrayList<E> extends AbstractList<E>
                 return cursor > 0;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public E previous() {
                 if (!hasPrevious()) throw new NoSuchElementException();

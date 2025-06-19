@@ -11,16 +11,18 @@ import java.util.Set;
 
 public class MyMap<K, V> implements Map<K, V> {
 
-    private final int capacity = 16;
-    private Entry<K, V>[] table;
+    private static final int CAPACITY = 16;
+    private final Entry<K, V>[] table;
     private int size = 0;
 
+    @SuppressWarnings("unchecked")
     public MyMap() {
-        table = (Entry<K, V>[]) new Entry[capacity];
+        table = new Entry[CAPACITY];
     }
 
     private int hash(Object key) {
-        return key == null ? 0 : Math.abs(key.hashCode()) % table.length;
+        int h = (key == null) ? 0 : key.hashCode();
+        return (h & 0x7FFFFFFF) % table.length;
     }
 
     @Override
@@ -78,8 +80,7 @@ public class MyMap<K, V> implements Map<K, V> {
         int index = hash(key);
         EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
         while (entry != null) {
-            //Kiểm tra có trùng key
-            if (key.equals(entry.getKey())) {
+            if (Objects.equals(key, entry.getKey())) {
                 V oldValue = entry.getValue();
                 entry.setValue(value);
                 return oldValue;
@@ -167,7 +168,7 @@ public class MyMap<K, V> implements Map<K, V> {
     }
 
     public void printDisplay() {
-        for (int i = 0; i < capacity; i++) {
+        for (int i = 0; i < CAPACITY; i++) {
             System.out.print("Bucket " + i + ": ");
             Entry<K, V> entry = table[i];
             if (entry != null) {
