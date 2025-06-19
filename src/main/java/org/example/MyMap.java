@@ -73,6 +73,7 @@ public class MyMap<K, V> implements Map<K, V> {
         return entry == null ? null : entry.getValue();
     }
 
+    @SuppressWarnings("unchecked")
     public void resize() {
         int newCapacity = CAPACITY * 2;
         Entry<K, V>[] newTable = new Entry[newCapacity];
