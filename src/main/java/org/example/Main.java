@@ -108,9 +108,6 @@ public class Main {
         System.out.println("SubList(1,3):" + list2);
 
         MyMap<String, Integer> map = new MyMap<>();
-
-
-
         map.put(APPLE, 10);
         map.put(BANANA, 20);
         map.put("orange", 30);

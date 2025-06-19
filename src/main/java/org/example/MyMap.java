@@ -73,7 +73,6 @@ public class MyMap<K, V> implements Map<K, V> {
         return entry == null ? null : entry.getValue();
     }
 
-    @SuppressWarnings("unckecked")
     public void resize() {
         int newCapacity = CAPACITY * 2;
         Entry<K, V>[] newTable = new Entry[newCapacity];
@@ -82,11 +81,11 @@ public class MyMap<K, V> implements Map<K, V> {
             while (map != null) {
                 int hash = map.getKey().hashCode();
                 int newIndex = Math.abs(hash) % newCapacity;
-                Entry<K, V> next = map.next;
+                EntryMap<K, V> next = map.next;
 
                 map.next = (EntryMap<K, V>) newTable[newIndex];
                 newTable[newIndex] = map;
-                map = (EntryMap<K, V>) next;
+                map = next;
             }
         }
         table = newTable;
@@ -94,7 +93,9 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
-
+        if (size == table.length) {
+            resize();
+        }
         int index = hash(key);
         EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
         while (entry != null) {
