@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MapTest {
+ class MapTest {
 
     @Test
-    public void testPut() {
+     void testPut() {
         MyMap<String, Integer> map = new MyMap<>();
         assertNull(map.put("a", 1));
         assertEquals(1, map.get("a"));

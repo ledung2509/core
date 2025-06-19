@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,13 +7,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.RandomAccess;
 
-public class MyArrayList<E> extends AbstractList<E>
-        implements java.util.List<E>, RandomAccess, Cloneable, java.io.Serializable {
+public class MyArrayList<E> implements java.util.List<E> {
 
     private Object[] elements;
-    private int size = 0;
+    private int size;
 
     public MyArrayList() {
         this.elements = new Object[10];
@@ -51,6 +48,7 @@ public class MyArrayList<E> extends AbstractList<E>
         return Arrays.copyOf(elements, size);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         if (a.length < size) {
@@ -120,13 +118,13 @@ public class MyArrayList<E> extends AbstractList<E>
         return true;
     }
 
-    private void rangeCheckForAdd(int index) {
+    public void rangeCheckForAdd(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
         }
     }
 
-    private String outOfBoundsMsg(int index) {
+    public String outOfBoundsMsg(int index) {
         return "Index: " + index + ", Size: " + size;
     }
 
@@ -151,10 +149,9 @@ public class MyArrayList<E> extends AbstractList<E>
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i >= 0; i--) {
             if (c.contains(elements[i])) {
-                remove(i);
-                i--; // lùi lại 1 vì sau khi xóa, các phần tử dồn lại
+                remove(i);// lùi lại 1 vì sau khi xóa, các phần tử dồn lại
                 modified = true;
             }
         }
@@ -167,7 +164,6 @@ public class MyArrayList<E> extends AbstractList<E>
         for (int i = 0; i < size; i++) {
             if (!c.contains(elements[i])) {
                 remove(i);
-                i--;
                 modified = true;
             }
         }
@@ -180,6 +176,7 @@ public class MyArrayList<E> extends AbstractList<E>
         size = 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E get(int index) {
         if (index < 0 || index >= size) {
@@ -188,6 +185,7 @@ public class MyArrayList<E> extends AbstractList<E>
         return (E) elements[index];
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E set(int index, E element) {
         Objects.checkIndex(index, size);
@@ -212,6 +210,7 @@ public class MyArrayList<E> extends AbstractList<E>
         size++;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E remove(int index) {
         if (index < 0 || index >= size) {
@@ -231,14 +230,12 @@ public class MyArrayList<E> extends AbstractList<E>
 
     @Override
     public int indexOf(Object o) {
-        if (o == null) {
-            for (int i = 0; i < size; i++) {
-                if (elements[i].equals(o)) {
+        for (int i = 0; i < size; i++) {
+            if (o == null) {
+                if (elements[i] == null) {
                     return i;
                 }
-            }
-        } else {
-            for (int i = 0; i < size; i++) {
+            } else {
                 if (o.equals(elements[i])) {
                     return i;
                 }
@@ -247,27 +244,24 @@ public class MyArrayList<E> extends AbstractList<E>
         return -1;
     }
 
-    int lastIndexOfRange(Object o, int start, int end) {
+    private int lastIndexOfRange(Object o, int end) {
         Object[] es = elements;
         if (o == null) {
-            for (int i = end - 1; i >= start; i--) {
-                if (es[i] == null) {
-                    return i;
-                }
+            for (int i = end - 1; i >= 0; i--) {
+                if (es[i] == null) return i;
             }
         } else {
-            for (int i = end - 1; i >= start; i--) {
-                if (o.equals(es[i])) {
-                    return i;
-                }
+            for (int i = end - 1; i >= 0; i--) {
+                if (o.equals(es[i])) return i;
             }
         }
         return -1;
     }
 
+
     @Override
     public int lastIndexOf(Object o) {
-        return lastIndexOfRange(o, 0, size);
+        return lastIndexOfRange(o, size);
     }
 
     @Override
@@ -279,7 +273,7 @@ public class MyArrayList<E> extends AbstractList<E>
     public ListIterator<E> listIterator(int index) {
         rangeCheckForAdd(index); // Cho phép index == size
 
-        return new ListIterator<E>() {
+        return new ListIterator<>() {
             int cursor = index;
             int lastRet = -1;
 
@@ -288,6 +282,7 @@ public class MyArrayList<E> extends AbstractList<E>
                 return cursor < size;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public E next() {
                 if (!hasNext()) throw new NoSuchElementException();
@@ -300,6 +295,7 @@ public class MyArrayList<E> extends AbstractList<E>
                 return cursor > 0;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public E previous() {
                 if (!hasPrevious()) throw new NoSuchElementException();

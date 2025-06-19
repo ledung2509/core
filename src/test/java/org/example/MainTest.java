@@ -2,25 +2,29 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ListIterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class MainTest {
+class MainTest {
 
     MyArrayList list = new MyArrayList();
 
     @Test
-    public void testConstructorAndSize() {
+    void testConstructorAndSize() {
         assertEquals(0, list.size());
         assertTrue(list.isEmpty());
     }
 
     @Test
-    public void testContains() {
+    void testContains() {
         list.add(1);
         list.add(2);
         assertTrue(list.contains(1));
@@ -29,7 +33,7 @@ public class MainTest {
     }
 
     @Test
-    public void testAddAndGet() {
+    void testAddAndGet() {
         assertTrue(list.add("A"));
         assertTrue(list.add("V"));
         assertTrue(list.add("E"));
@@ -40,7 +44,7 @@ public class MainTest {
     }
 
     @Test
-    public void testSet() {
+    void testSet() {
         list.add("A");
         list.add("B");
         assertEquals("B", list.set(1, "C"));
@@ -48,15 +52,15 @@ public class MainTest {
     }
 
     @Test
-    public void testToArray() {
+    void testToArray() {
         list.add(1);
         list.add(2);
         Object[] arr = list.toArray();
-        assertArrayEquals(new Object[]{1,2}, arr);
+        assertArrayEquals(new Object[]{1, 2}, arr);
     }
 
     @Test
-    public void testClear() {
+    void testClear() {
         list.add(1);
         list.add(2);
         list.clear();
@@ -65,7 +69,7 @@ public class MainTest {
     }
 
     @Test
-    public void testRemoveByIndex() {
+    void testRemoveByIndex() {
         list.add(1);
         list.add(2);
         list.add(3);
@@ -76,49 +80,49 @@ public class MainTest {
     }
 
     @Test
-    public void testContainsAll() {
+    void testContainsAll() {
         list.add(1);
         list.add(2);
-        List<Integer> other = Arrays.asList(1,2);
+        List<Integer> other = Arrays.asList(1, 2);
         assertTrue(list.containsAll(other));
-        other = Arrays.asList(1,2,3);
+        other = Arrays.asList(1, 2, 3);
         assertFalse(list.containsAll(other));
     }
 
     @Test
-    public void testAddAll() {
-        List<Integer> other = Arrays.asList(1,2,3);
+    void testAddAll() {
+        List<Integer> other = Arrays.asList(1, 2, 3);
         assertTrue(list.addAll(other));
         assertEquals(3, list.size());
         assertEquals(2, list.get(1));
     }
 
     @Test
-    public void testAddAllAtIndex() {
+    void testAddAllAtIndex() {
         list.add(1);
         list.add(4);
-        List<Integer> other = Arrays.asList(2,3);
+        List<Integer> other = Arrays.asList(2, 3);
         assertTrue(list.addAll(1, other));
-        assertEquals(Arrays.asList(1,2,3,4), Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
+        assertEquals(Arrays.asList(1, 2, 3, 4), Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
     }
 
     @Test
-    public void testRemoveAll() {
+    void testRemoveAll() {
         list.add(1);
         list.add(2);
         list.add(3);
-        assertTrue(list.removeAll(Arrays.asList(2,3)));
+        assertTrue(list.removeAll(Arrays.asList(2, 3)));
         assertEquals(1, list.size());
         assertEquals(1, list.get(0));
-        assertFalse(list.removeAll(Arrays.asList(4,5)));
+        assertFalse(list.removeAll(Arrays.asList(4, 5)));
     }
 
     @Test
-    public void testRetainAll() {
+    void testRetainAll() {
         list.add(1);
         list.add(2);
         list.add(3);
-        assertTrue(list.retainAll(Arrays.asList(2,3)));
+        assertTrue(list.retainAll(Arrays.asList(2, 3)));
         assertEquals(2, list.size());
         assertEquals(2, list.get(0));
         assertEquals(3, list.get(1));
@@ -161,7 +165,7 @@ public class MainTest {
     void testSubList() {
         for (int i = 0; i < 5; i++) list.add(i);
         List<Integer> sub = list.subList(1, 4);
-        assertEquals(Arrays.asList(1,2,3), sub);
+        assertEquals(Arrays.asList(1, 2, 3), sub);
     }
 
     @Test

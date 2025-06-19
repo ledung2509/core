@@ -16,7 +16,7 @@ public class MyMap<K, V> implements Map<K, V> {
     private int size = 0;
 
     public MyMap() {
-        table = (Entry<K, V>[]) new Entry[capacity];
+        table = new Entry[capacity];
     }
 
     private int hash(Object key) {
@@ -73,16 +73,16 @@ public class MyMap<K, V> implements Map<K, V> {
 
     public void resize() {
         int newCapacity = capacity * 2;
-        Entry<K, V>[] newTable = (Entry<K, V>[]) new Entry[newCapacity];
+        Entry<K, V>[] newTable = new Entry[newCapacity];
         for (Entry<K, V> entry : table) {
             EntryMap<K, V> map = (EntryMap<K, V>) entry;
             while (map != null) {
-                int newIndex = Math.abs(map.getKey().hashCode()) % newCapacity;
+                int hash = map.getKey().hashCode();
+                int newIndex = Math.abs(hash) % newCapacity;
                 Entry<K, V> next = map.next;
-                if (next != null) {
-                    map.next = (EntryMap<K, V>) newTable[newIndex];
-                    newTable[newIndex] = map;
-                }
+
+                map.next = (EntryMap<K, V>) newTable[newIndex];
+                newTable[newIndex] = map;
                 map = (EntryMap<K, V>) next;
             }
         }
@@ -91,9 +91,7 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
-        if (size >= capacity * 0.5) {
-            resize();
-        }
+
         int index = hash(key);
         EntryMap<K, V> entry = (EntryMap<K, V>) table[index];
         while (entry != null) {

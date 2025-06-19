@@ -2,11 +2,12 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.List;
 
-public class mySet<E> implements Set<E> {
+public class MySet<E> implements Set<E> {
 
     private final List<E> list = new ArrayList<>();
 
@@ -56,7 +57,7 @@ public class mySet<E> implements Set<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return list.containsAll(c);
+        return new HashSet<>(list).containsAll(c);
     }
 
     @Override

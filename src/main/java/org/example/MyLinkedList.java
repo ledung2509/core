@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
-public class myLinkedList<E> implements List<E> {
+public class MyLinkedList<E> implements List<E> {
 
     Node<E> head;
     Node<E> tail;
@@ -160,20 +161,12 @@ public class myLinkedList<E> implements List<E> {
     @Override
     public int lastIndexOf(Object o) {
         Node<E> current = tail;
-        int c = size;
         for (int i = size - 1; i >= 0; i--) {
-            if (o == null ? current.item == null : o.equals(current.item)) {
+            if (Objects.equals(o, current.item)) {
                 return i;
             }
             current = current.prev;
         }
-//        while (current != null) {
-//            if (o != null && current.item.equals(o)) {
-//                return c;
-//            }
-//            current = current.prev;
-//            c--;
-//        }
         return -1;
     }
 
@@ -219,17 +212,17 @@ public class myLinkedList<E> implements List<E> {
 
             @Override
             public void remove() {
-
+                throw  new NullPointerException();
             }
 
             @Override
             public void set(E e) {
-
+                throw  new NullPointerException();
             }
 
             @Override
             public void add(E e) {
-
+                throw  new NullPointerException();
             }
         };
     }
@@ -238,7 +231,7 @@ public class myLinkedList<E> implements List<E> {
     public boolean remove(Object o) {
         Node<E> node = head;
         while (node != null) {
-            if (o == null && node.item == null ? null : o.equals(node.item)) {
+            if (Boolean.TRUE.equals(o == null && node.item == null ? null : Objects.equals(o, node.item))) {
                 if (node.prev == null) { // node là head
                     head = node.next;
                 } else {
@@ -388,7 +381,7 @@ public class myLinkedList<E> implements List<E> {
 
             @Override
             public void remove() {
-
+                throw new UnsupportedOperationException();
             }
 
             @Override
@@ -398,14 +391,14 @@ public class myLinkedList<E> implements List<E> {
 
             @Override
             public void add(E e) {
-
+                throw new UnsupportedOperationException();
             }
         };
     }
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        List<E> list = new ArrayList<E>();
+        List<E> list = new ArrayList<>();
         Node<E> current = head;
         for (int i = 0; i < fromIndex; i++) {
             current = current.next;
