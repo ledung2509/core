@@ -9,21 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-<<<<<<< HEAD
 class LinkedListTest {
     MyLinkedList<String> list = new MyLinkedList<>();
 
     @Test
     void testAddAndGet() {
-=======
-public class LinkedListTest {
-
-    MyLinkedList list = new MyLinkedList();
-
-    @Test
-    void testAddAndGet() {
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         list.add("C");
@@ -34,10 +24,6 @@ public class LinkedListTest {
 
     @Test
     void testAddByIndex() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("C");
         list.add(1, "B");
@@ -46,11 +32,6 @@ public class LinkedListTest {
 
     @Test
     void testSet() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
-        list.add("A");
         list.add("B");
         String old = list.set(1, "X");
         assertEquals("B", old);
@@ -59,10 +40,6 @@ public class LinkedListTest {
 
     @Test
     void testRemoveByIndex() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         list.add("C");
@@ -73,10 +50,6 @@ public class LinkedListTest {
 
     @Test
     void testContains() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         assertTrue(list.contains("A"));
@@ -85,10 +58,6 @@ public class LinkedListTest {
 
     @Test
     void testIsEmpty() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         assertTrue(list.isEmpty());
         list.add("A");
         assertFalse(list.isEmpty());
@@ -96,10 +65,6 @@ public class LinkedListTest {
 
     @Test
     void testIndexOfAndLastIndexOf() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         list.add("A");
@@ -109,10 +74,6 @@ public class LinkedListTest {
 
     @Test
     void testToArray() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         Object[] arr = list.toArray();
@@ -121,10 +82,6 @@ public class LinkedListTest {
 
     @Test
     void testContainsAll() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         assertTrue(list.containsAll(Arrays.asList("A", "B")));
@@ -133,10 +90,6 @@ public class LinkedListTest {
 
     @Test
     void testAddAll() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.addAll(Arrays.asList("B", "C"));
         assertEquals(3, list.size());
@@ -145,10 +98,6 @@ public class LinkedListTest {
 
     @Test
     void testRemoveAll() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.addAll(Arrays.asList("A", "B", "C", "B"));
         list.removeAll(Arrays.asList("B"));
         assertEquals(2, list.size());
@@ -158,10 +107,6 @@ public class LinkedListTest {
 
     @Test
     void testRetainAll() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.addAll(Arrays.asList("A", "B", "C"));
         list.retainAll(Arrays.asList("B"));
         assertEquals(1, list.size());
@@ -170,10 +115,6 @@ public class LinkedListTest {
 
     @Test
     void testClear() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.add("A");
         list.add("B");
         list.clear();
@@ -182,10 +123,6 @@ public class LinkedListTest {
 
     @Test
     void testSubList() {
-<<<<<<< HEAD
-=======
-        MyLinkedList<String> list = new MyLinkedList<>();
->>>>>>> hash1
         list.addAll(Arrays.asList("A", "B", "C", "D"));
         List<String> sub = (List<String>) list.subList(1, 2);
         assertEquals(Arrays.asList("B", "C"), sub);
