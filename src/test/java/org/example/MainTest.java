@@ -13,18 +13,30 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+<<<<<<< HEAD
 class MainTest {
+=======
+ class MainTest {
+>>>>>>> hash1
 
-    MyArrayList list = new MyArrayList();
+     MyArrayList list = new MyArrayList();
 
     @Test
+<<<<<<< HEAD
     void testConstructorAndSize() {
+=======
+     void testConstructorAndSize() {
+>>>>>>> hash1
         assertEquals(0, list.size());
         assertTrue(list.isEmpty());
     }
 
     @Test
+<<<<<<< HEAD
     void testContains() {
+=======
+     void testContains() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         assertTrue(list.contains(1));
@@ -33,7 +45,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testAddAndGet() {
+=======
+     void testAddAndGet() {
+>>>>>>> hash1
         assertTrue(list.add("A"));
         assertTrue(list.add("V"));
         assertTrue(list.add("E"));
@@ -44,7 +60,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testSet() {
+=======
+     void testSet() {
+>>>>>>> hash1
         list.add("A");
         list.add("B");
         assertEquals("B", list.set(1, "C"));
@@ -52,7 +72,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testToArray() {
+=======
+     void testToArray() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         Object[] arr = list.toArray();
@@ -60,7 +84,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testClear() {
+=======
+     void testClear() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         list.clear();
@@ -69,7 +97,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testRemoveByIndex() {
+=======
+     void testRemoveByIndex() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         list.add(3);
@@ -80,7 +112,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testContainsAll() {
+=======
+     void testContainsAll() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         List<Integer> other = Arrays.asList(1, 2);
@@ -90,15 +126,24 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testAddAll() {
         List<Integer> other = Arrays.asList(1, 2, 3);
+=======
+     void testAddAll() {
+        List<Integer> other = Arrays.asList(1,2,3);
+>>>>>>> hash1
         assertTrue(list.addAll(other));
         assertEquals(3, list.size());
         assertEquals(2, list.get(1));
     }
 
     @Test
+<<<<<<< HEAD
     void testAddAllAtIndex() {
+=======
+     void testAddAllAtIndex() {
+>>>>>>> hash1
         list.add(1);
         list.add(4);
         List<Integer> other = Arrays.asList(2, 3);
@@ -107,7 +152,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testRemoveAll() {
+=======
+     void testRemoveAll() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         list.add(3);
@@ -118,7 +167,11 @@ class MainTest {
     }
 
     @Test
+<<<<<<< HEAD
     void testRetainAll() {
+=======
+     void testRetainAll() {
+>>>>>>> hash1
         list.add(1);
         list.add(2);
         list.add(3);

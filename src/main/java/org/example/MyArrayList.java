@@ -51,10 +51,17 @@ public class MyArrayList<E> implements java.util.List<E> {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
+        Class<?> componentType = a.getClass().getComponentType();
         if (a.length < size) {
-            return (T[]) Arrays.copyOf(elements, size, a.getClass());
+            T[] result = (T[]) java.lang.reflect.Array.newInstance(componentType, size);
+            for (int i = 0; i < size; i++) {
+                result[i] = (T) elements[i];
+            }
+            return result;
         }
-        System.arraycopy(elements, 0, a, 0, size);
+        for (int i = 0; i < size; i++) {
+            a[i] = (T) elements[i];
+        }
         if (a.length > size) {
             a[size] = null;
         }
@@ -130,14 +137,13 @@ public class MyArrayList<E> implements java.util.List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        rangeCheckForAdd(index); // kiểm tra hợp lệ
+        rangeCheckForAdd(index);
         Object[] toAdd = c.toArray();
         int numNew = toAdd.length;
         if (numNew == 0) return false;
 
         ensureCapacity(size + numNew);
 
-        // Dời phần tử từ index sang phải
         System.arraycopy(elements, index, elements, index + numNew, size - index);
 
         // Chèn phần tử mới
@@ -151,7 +157,7 @@ public class MyArrayList<E> implements java.util.List<E> {
         boolean modified = false;
         for (int i = size - 1; i >= 0; i--) {
             if (c.contains(elements[i])) {
-                remove(i);// lùi lại 1 vì sau khi xóa, các phần tử dồn lại
+                remove(i);
                 modified = true;
             }
         }
@@ -161,7 +167,7 @@ public class MyArrayList<E> implements java.util.List<E> {
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean modified = false;
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i >= 0; i--) {
             if (!c.contains(elements[i])) {
                 remove(i);
                 modified = true;
@@ -203,7 +209,6 @@ public class MyArrayList<E> implements java.util.List<E> {
             elements = Arrays.copyOf(elements, elements.length * 2);
         }
 
-        //  Dời các phần tử từ vị trí index sang phải
         System.arraycopy(elements, index, elements, index + 1, size - index);
 
         elements[index] = element;
@@ -244,15 +249,19 @@ public class MyArrayList<E> implements java.util.List<E> {
         return -1;
     }
 
-    private int lastIndexOfRange(Object o, int end) {
+    int lastIndexOfRange(Object o, int end) {
         Object[] es = elements;
         if (o == null) {
             for (int i = end - 1; i >= 0; i--) {
-                if (es[i] == null) return i;
+                if (es[i] == null) {
+                    return i;
+                }
             }
         } else {
             for (int i = end - 1; i >= 0; i--) {
-                if (o.equals(es[i])) return i;
+                if (o.equals(es[i])) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -271,7 +280,7 @@ public class MyArrayList<E> implements java.util.List<E> {
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        rangeCheckForAdd(index); // Cho phép index == size
+        rangeCheckForAdd(index);
 
         return new ListIterator<>() {
             int cursor = index;

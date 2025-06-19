@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class MyLinkedList<E> implements List<E> {
@@ -25,36 +26,36 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public E get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         Node<E> p = head;
-        int c = 0;
-        while (p != null && c < index) {
+        for (int i = 0; i < index; i++) {
             p = p.next;
-            c++;
         }
         return p.item;
     }
 
     @Override
     public E set(int index, E element) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+
         Node<E> p = head;
-        int c = 0;
-        while (p != null && c < index) {
+        for (int i = 0; i < index; i++) {
             p = p.next;
-            c++;
         }
-        if (c == index) {
-            E old = p.item;
-            p.item = element;
-            return old;
-        }
-        return null;
+        E old = p.item;
+        p.item = element;
+        return old;
     }
 
     @Override
     public boolean contains(Object o) {
         Node<E> current = head;
         while (current != null) {
-            if (o != null && current.item.equals(o)) {
+            if (current.item.equals(o)) {
                 return true;
             }
             current = current.next;
@@ -64,7 +65,7 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             Node<E> current = head;
 
             @Override
@@ -74,6 +75,9 @@ public class MyLinkedList<E> implements List<E> {
 
             @Override
             public E next() {
+                if (current == null) {
+                    throw  new NoSuchElementException();
+                }
                 E value = current.item;
                 current = current.next;
                 return value;
@@ -93,17 +97,16 @@ public class MyLinkedList<E> implements List<E> {
         return array;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         Node<E> p = head;
         int i = 0;
-        Object[] result = a;
         while (p != null) {
-            result[i++] = p.item;
+            a[i++] = (T) p.item;
             p = p.next;
         }
         if (a.length > size) {
-            // Đánh dấu kết thúc nếu mảng lớn hơn size
             a[size] = null;
         }
         return a;
@@ -149,7 +152,7 @@ public class MyLinkedList<E> implements List<E> {
         Node<E> current = head;
         int c = 0;
         while (current != null) {
-            if (o != null && current.item.equals(o)) {
+            if (current.item.equals(o)) {
                 return c;
             }
             c++;
@@ -172,9 +175,8 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public ListIterator<E> listIterator() {
-        return new ListIterator<E>() {
+        return new ListIterator<>() {
             Node<E> current = head;
-            Node<E> lastIndex = null;
             int nextIndex = 0;
 
             @Override
@@ -184,6 +186,9 @@ public class MyLinkedList<E> implements List<E> {
 
             @Override
             public E next() {
+                if (current == null) {
+                    throw new NoSuchElementException();
+                }
                 E value = current.item;
                 current = current.next;
                 nextIndex++;
@@ -207,22 +212,22 @@ public class MyLinkedList<E> implements List<E> {
 
             @Override
             public int previousIndex() {
-                return nextIndex -1;
+                return nextIndex - 1;
             }
 
             @Override
             public void remove() {
-                throw  new NullPointerException();
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public void set(E e) {
-                throw  new NullPointerException();
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public void add(E e) {
-                throw  new NullPointerException();
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -264,9 +269,8 @@ public class MyLinkedList<E> implements List<E> {
     public boolean addAll(Collection<? extends E> c) {
         boolean changed = false;
         for (E e : c) {
-            if (this.add(e)) {
-                changed = true;
-            }
+            this.add(e);
+            changed = true;
         }
         return changed;
     }
@@ -339,7 +343,7 @@ public class MyLinkedList<E> implements List<E> {
         }
 
         Node<E> startNode = current;
-        return new ListIterator<E>() {
+        return new ListIterator<>() {
 
             Node<E> nextNode = startNode;
             Node<E> lastReturned = null;
@@ -352,6 +356,9 @@ public class MyLinkedList<E> implements List<E> {
 
             @Override
             public E next() {
+                if (nextNode == null) {
+                    throw new NoSuchElementException();
+                }
                 lastReturned = nextNode;
                 E item = nextNode.item;
                 nextNode = nextNode.next;
@@ -408,16 +415,5 @@ public class MyLinkedList<E> implements List<E> {
             current = current.next;
         }
         return list;
-    }
-
-    public void printLinkedList() {
-        Node<E> p = head;
-        while (p != null) {
-            if (p.item != null) { // Chỉ in nếu item không phải null
-                System.out.print(p.item + " ");
-            }
-            p = p.next;
-        }
-        System.out.println();
     }
 }
