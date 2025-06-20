@@ -2,6 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class MapTest {
 
     @Test
-     void testPut() {
+    void testPut() {
         MyMap<String, Integer> map = new MyMap<>();
         assertNull(map.put("a", 1));
         assertEquals(1, map.get("a"));
@@ -48,6 +49,21 @@ public class MapTest {
         assertTrue(map.containsValue(5));
         assertFalse(map.containsValue(99));
     }
+
+    @Test
+    void testResize() throws Exception{
+        MyMap<String, String> map = new MyMap<>();
+
+        map.put("A", "Apple");
+        map.resize();
+
+        Field tableField = MyMap.class.getDeclaredField("table");
+        tableField.setAccessible(true);
+        Object[] newTable = (Object[]) tableField.get(map);
+
+        assertTrue(newTable.length > 16);
+    }
+
 
     @Test
     void testRemove() {

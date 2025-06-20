@@ -11,13 +11,14 @@ import java.util.Set;
 
 public class MyMap<K, V> implements Map<K, V> {
 
-    private static final int CAPACITY = 16;
+    private static final int DEFAULT_CAPACITY = 16;
+    private int capacity = DEFAULT_CAPACITY;
     private Entry<K, V>[] table;
     private int size = 0;
 
     @SuppressWarnings("unchecked")
     public MyMap() {
-        table = new Entry[CAPACITY];
+        table = new Entry[capacity];
     }
 
     private int hash(Object key) {
@@ -75,26 +76,30 @@ public class MyMap<K, V> implements Map<K, V> {
 
     @SuppressWarnings("unchecked")
     public void resize() {
-        int newCapacity = CAPACITY * 2;
+        int newCapacity = capacity * 2;
         Entry<K, V>[] newTable = new Entry[newCapacity];
-        for (Entry<K, V> entry : table) {
-            EntryMap<K, V> map = (EntryMap<K, V>) entry;
-            while (map != null) {
-                int hash = map.getKey().hashCode();
-                int newIndex = Math.abs(hash) % newCapacity;
-                EntryMap<K, V> next = map.next;
 
-                map.next = (EntryMap<K, V>) newTable[newIndex];
-                newTable[newIndex] = map;
-                map = next;
+        for (Entry<K, V> entry : table) {
+            EntryMap<K, V> current = (EntryMap<K, V>) entry;
+            while (current != null) {
+                EntryMap<K, V> next = current.next;
+                int h = (next == null) ? 0 : next.hashCode();
+                int newIndex = Math.floorMod(h, newCapacity);
+
+
+                current.next = (EntryMap<K, V>) newTable[newIndex];
+                newTable[newIndex] = current;
+
+                current = next;
             }
         }
         table = newTable;
+        capacity = newCapacity;
     }
 
     @Override
     public V put(K key, V value) {
-        if (size == table.length) {
+        if (size >= capacity * 0.5) {
             resize();
         }
         int index = hash(key);
@@ -188,7 +193,7 @@ public class MyMap<K, V> implements Map<K, V> {
     }
 
     public void printDisplay() {
-        for (int i = 0; i < CAPACITY; i++) {
+        for (int i = 0; i < capacity; i++) {
             System.out.print("Bucket " + i + ": ");
             Entry<K, V> entry = table[i];
             if (entry != null) {
