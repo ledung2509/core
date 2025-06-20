@@ -3,6 +3,7 @@ package org.example;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,10 +33,10 @@ class LinkedListTest {
 
     @Test
     void testSet() {
-        list.add("B");
-        String old = list.set(1, "X");
+        list.add("B"); // index 0
+        String old = list.set(0, "X");
         assertEquals("B", old);
-        assertEquals("X", list.get(1));
+        assertEquals("X", list.get(0));
     }
 
     @Test
@@ -124,7 +125,7 @@ class LinkedListTest {
     @Test
     void testSubList() {
         list.addAll(Arrays.asList("A", "B", "C", "D"));
-        List<String> sub = (List<String>) list.subList(1, 2);
+        List<String> sub = list.subList(1, 2);
         assertEquals(Arrays.asList("B", "C"), sub);
     }
 }

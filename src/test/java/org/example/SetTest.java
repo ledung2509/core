@@ -4,26 +4,35 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SetTest {
+public class SetTest {
     
     @Test
     void testAdd() {
         MySet<String> set = new MySet<>();
-        assertFalse(set.add("a")); // hiện tại luôn trả về false
+        assertTrue(set.add("a"));
+        assertFalse(set.add("a"));
+        assertEquals(1, set.size());
     }
 
     @Test
     void testSizeAndIsEmpty() {
         MySet<Integer> set = new MySet<>();
         assertEquals(0, set.size());
-        assertFalse(set.isEmpty()); // hiện tại luôn trả về false
+        assertTrue(set.isEmpty());
+
+        set.add(1);
+        assertEquals(1, set.size());
+        assertFalse(set.isEmpty());
     }
 
     @Test
@@ -35,7 +44,15 @@ class SetTest {
     @Test
     void testIterator() {
         MySet<Integer> set = new MySet<>();
-        assertNull(set.iterator());
+        Iterator<Integer> it = set.iterator();
+
+        assertNotNull(it);
+        assertFalse(it.hasNext());
+
+        set.add(10);
+        it = set.iterator();
+        assertTrue(it.hasNext());
+        assertEquals(10, it.next());
     }
 
     @Test
@@ -48,7 +65,11 @@ class SetTest {
     void testToArrayGeneric() {
         MySet<String> set = new MySet<>();
         String[] arr = new String[1];
-        assertNull(set.toArray(arr)); // hiện tại luôn trả về null
+        String[] result = set.toArray(arr);
+
+        assertNotNull(result);
+        assertEquals(1, result.length);
+        assertNull(arr[0]);
     }
 
     @Test
@@ -68,7 +89,10 @@ class SetTest {
     void testAddAll() {
         MySet<String> set = new MySet<>();
         Set<String> addSet = new HashSet<>(Arrays.asList("a", "b"));
-        assertFalse(set.addAll(addSet));
+        assertTrue(set.addAll(addSet));
+        assertEquals(2, set.size());
+        assertTrue(set.contains("a"));
+        assertTrue(set.contains("b"));
     }
 
     @Test
@@ -88,7 +112,14 @@ class SetTest {
     @Test
     void testClear() {
         MySet<String> set = new MySet<>();
+        set.add("a");
+        set.add("b");
+
+        assertEquals(2, set.size());
+
         set.clear();
-        // Không có gì để assert, vì clear() không trả về gì và size() đang luôn trả về 0
+
+        assertEquals(0, set.size());
+        assertTrue(set.isEmpty());
     }
 }

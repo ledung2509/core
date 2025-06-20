@@ -62,12 +62,13 @@ public class MySet<E> implements Set<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        boolean changed = false;
         for (E e : c) {
             if (add(e)) {
-                return true;
+                changed = true;
             }
         }
-        return false;
+        return changed;
     }
 
     @Override

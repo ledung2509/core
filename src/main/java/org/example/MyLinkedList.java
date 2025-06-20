@@ -21,7 +21,7 @@ public class MyLinkedList<E> implements List<E> {
 
     @Override
     public boolean isEmpty() {
-        return head == null;
+        return size == 0;
     }
 
     @Override
@@ -67,6 +67,8 @@ public class MyLinkedList<E> implements List<E> {
     public Iterator<E> iterator() {
         return new Iterator<>() {
             Node<E> current = head;
+            Node<E> lastReturned = null;
+            Node<E> previous = null;
 
             @Override
             public boolean hasNext() {
@@ -76,11 +78,45 @@ public class MyLinkedList<E> implements List<E> {
             @Override
             public E next() {
                 if (current == null) {
-                    throw  new NoSuchElementException();
+                    throw new NoSuchElementException();
                 }
+                lastReturned = current;
                 E value = current.item;
                 current = current.next;
                 return value;
+            }
+
+            @Override
+            public void remove() {
+                if (lastReturned == null) {
+                    throw new IllegalStateException();
+                }
+
+                // Tìm node cần xóa
+                if (lastReturned == head) {
+                    head = head.next;
+                    if (head != null) {
+                        head.prev = null;
+                    } else {
+                        tail = null;
+                    }
+                } else {
+                    Node<E> p = head;
+                    while (p != null && p.next != lastReturned) {
+                        p = p.next;
+                    }
+                    if (p != null) {
+                        p.next = lastReturned.next;
+                        if (lastReturned.next != null) {
+                            lastReturned.next.prev = p;
+                        } else {
+                            tail = p;
+                        }
+                    }
+                }
+
+                size--;
+                lastReturned = null;
             }
         };
     }

@@ -202,7 +202,7 @@ public class MyArrayList<E> implements java.util.List<E> {
 
     @Override
     public void add(int index, E element) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
         if (size == elements.length) {

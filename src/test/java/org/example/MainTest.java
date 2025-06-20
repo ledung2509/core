@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MainTest {
+public class MainTest {
 
      MyArrayList<Integer> list = new MyArrayList<>();
 
@@ -39,15 +39,15 @@ class MainTest {
         assertTrue(list.add(9));
         assertTrue(list.add(7));
         assertEquals(5, list.size());
-        assertEquals(1, list.get(0));
+        assertEquals(0, list.get(0));
     }
 
     @Test
     void testSet() {
         list.add(1);
         list.add(3);
-        assertEquals(4, list.set(1, 6));
-        assertEquals(7, list.get(1));
+        assertEquals(3, list.set(1, 6));
+        assertEquals(6, list.get(1));
     }
 
     @Test
